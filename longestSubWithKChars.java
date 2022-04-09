@@ -9,9 +9,9 @@ class Solution {
             char val = s.charAt(end);
             m.put(val, m.getOrDefault(val,0)+1);
             while(m.size() > k){
-                m.put(s.charAt(start), m.get(s.charAt(start))-1);
-                if(m.get(s.charAt(start)) ==0)
-                    m.remove(s.charAt(start));
+                m.put(s.charAt(start), m.get(s.charAt(start))-1); // shriking the sliding window
+                if(m.get(s.charAt(start)) == 0)
+                    m.remove(s.charAt(start)); // removing character as its not a part of valid substring
                 start++;
             }
             len = Math.max(len, end-start+1);
