@@ -14,8 +14,6 @@ class Solution {
             return null;
         ListNode i = head;
         ListNode j = head.next;
-        if(head == null)
-            return null;
         while(j != null){
             if(i.val != j.val){
                 i.next = j;
