@@ -1,27 +1,14 @@
 class Solution {
     public boolean hasAllCodes(String s, int k) {
-        int req = (int)Math.pow(2,k) -1;
-        int[] arr = new int[req+1];
+       Set<String> st = new HashSet<>();
+        int req= 1<<k;
         int count=0;
-        int len = s.length();
-        for(int i=0; i< len-k+1; i++){
-            String str= s.substring(i, i+k);
-            int val = helper(str,k);
-            if(val<=req && arr[val] == 0){
-                arr[val]++;
-                count++;
-            }
-                
+        for(int i=0; i< s.length()- k+1; i++){
+            String sub= s.substring(i,i+k);
+            st.add(sub);
         }
-        // System.out.println
-        return count == req+1;
+        return st.size() == req;
         
     }
-    public int helper(String str, int k){
-        int val=0;
-        for(int i=k-1; i>=0; i--){
-            val+= Character.getNumericValue(str.charAt(i)) * Math.pow(2, k-i-1);
-        }
-        return val;
-    }
+    
 }
