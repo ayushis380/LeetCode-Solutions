@@ -1,12 +1,19 @@
 class Solution {
     public boolean hasAllCodes(String s, int k) {
-       Set<String> st = new HashSet<>();
         int req= 1<<k;
-        for(int i=0; i< s.length()- k+1; i++){
-            String sub= s.substring(i,i+k);
-            st.add(sub);
+        boolean[] check = new boolean[req];
+        int allOne = req-1;
+        int hv= 0;
+        for(int i=0; i< s.length(); i++){
+            hv = ((hv <<1 ) & allOne) | (s.charAt(i)-'0');
+            if(i>= k-1 && !check[hv]){
+                check[hv] = true;
+                req--;
+                if(req== 0)
+                    return true;
+            }
         }
-        return st.size() == req;
+        return false;
         
     }
     
