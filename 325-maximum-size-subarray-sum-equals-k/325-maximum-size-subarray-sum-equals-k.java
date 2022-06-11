@@ -10,8 +10,8 @@ class Solution {
             if(m.containsKey(pfsum-k)){
                 maxLen = Math.max(maxLen, i - m.get(pfsum-k));
             }
-            if(!m.containsKey(pfsum))
-                m.put(pfsum, i);    
+            else
+                m.putIfAbsent(pfsum, i);    
         }
         return maxLen;
     }
