@@ -10,21 +10,19 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        List<Integer> arr = new ArrayList<>();
+       ListNode dummy = new ListNode(0);
+        ListNode head = dummy;
+        PriorityQueue<Integer> comp = new PriorityQueue<>((a,b)-> a-b);
         for(ListNode l: lists){
             while(l!=null){
-                arr.add(l.val);
-                l= l.next;
+            comp.offer(l.val);
+            l= l.next;
             }
         }
-        Collections.sort(arr);
-        ListNode dummy = new ListNode(0);
-        ListNode head = dummy;
-        for(Integer i: arr){
-            head.next = new ListNode(i);
+        while(!comp.isEmpty()){
+            head.next = new ListNode(comp.poll());
             head = head.next;
         }
-        head.next = null;
         return dummy.next;
     }
 }
