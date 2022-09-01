@@ -5,7 +5,7 @@ class Solution {
         for(int i=0; i< prices.length; i++){
             if(prices[i] < minp)
                 minp = prices[i];
-            if(prices[i]-minp > global_maxp ){
+            else if(prices[i]-minp > global_maxp ){
                 global_maxp = prices[i] - minp;
             }
         }
