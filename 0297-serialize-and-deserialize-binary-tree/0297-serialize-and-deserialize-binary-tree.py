@@ -18,7 +18,7 @@ class Codec:
                 result.append("N")
                 return
             
-            result += str(node.val) # if we append ',' with each val then at last val we will have ',' which creates an extra element during split
+            result.append(str(node.val)) # if we append ',' with each val then at last val we will have ',' which creates an extra element during split
             dfs(node.left)
             dfs(node.right)
         
