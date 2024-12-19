@@ -8,35 +8,43 @@
 class Codec:
 
     def serialize(self, root):
-        data = []
-        def dfs(root):
-            nonlocal data
+        # preorder traversal 
+        # root left right - easier to decode, as everything will come after other in order
+        result = []
 
-            if not root:
-                data.append("N")
+        def dfs(node):
+            nonlocal result # needs a nonlocal as we are updating it
+            if not node:
+                result.append("N")
                 return
-            data.append(str(root.val))
-            dfs(root.left)
-            dfs(root.right)
+            
+            result += str(node.val) # if we append ',' with each val then at last val we will have ',' which creates an extra element during split
+            dfs(node.left)
+            dfs(node.right)
         
         dfs(root)
-        return ",".join(data)
+        print(result)
+        return ','.join(result) 
         
 
     def deserialize(self, data):
-        nodes = data.split(',')
-        ptr = 0
+        ind = 0
+        values = data.split(',')
+
         def dfs():
-            nonlocal ptr
-            if nodes[ptr] == "N":
-                ptr += 1
+            nonlocal ind
+            if values[ind] == "N": # nonlocal for values not required as we are only accessing it
+                ind += 1
                 return None
-            root = TreeNode(int(nodes[ptr]))
-            ptr += 1
-            root.left = dfs()
-            root.right = dfs()
-            return root
-        
+            
+            # accessing according to preorder
+            node = TreeNode(int(values[ind])) # access each value
+            ind += 1
+            node.left = dfs()
+            node.right = dfs()
+
+            return node
+
         return dfs()
         
 
