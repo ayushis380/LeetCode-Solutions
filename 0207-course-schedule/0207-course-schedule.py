@@ -1,5 +1,6 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # Kahns algo
         indegree = [0] * numCourses
         adjlist = [[] for i in range(numCourses)]
         queue = deque()
