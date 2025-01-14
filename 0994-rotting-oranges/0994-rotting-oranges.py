@@ -1,5 +1,6 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
+        # dont forget about empty cell
         rows, cols = len(grid), len(grid[0])
         time = -1
         queue = deque()
