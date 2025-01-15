@@ -1,27 +1,35 @@
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        if not n:
-            return True
-        
-        adjlist = defaultdict(list)
-        visited = set()
+        parent = list(range(n))
+        rank = [0] * n
+        components = n 
 
-        for u,v in edges:
-            adjlist[u].append(v)
-            adjlist[v].append(u)
+        def find(node):
+            if parent[node] != node:
+                parent[node] = find(parent[node])
+            return parent[node]
         
-        def dfs(node, prev):
-            if node in visited:
+        def union(u, v):
+            nonlocal components
+            root_u = find(u)
+            root_v = find(v)
+
+            if root_u == root_v:
                 return False
             
-            visited.add(node)
-            for nei in adjlist[node]:
-                if nei != prev:
-                    if not dfs(nei, node):
-                        return False # should return from here if not valid tree
+            if rank[root_u] < rank[root_v]:
+                parent[root_u] = root_v
+            elif rank[root_u] > rank[root_v]:
+                parent[root_v] = root_u
+            else:
+                parent[root_u] = root_v
+                rank[root_v] += 1
             
+            components -= 1
             return True
+         
+        for u, v in edges:
+            if not union(u, v):
+                return False
         
-    # calling from any node works as its a tree and each node can be reached from any of the nodes, but there should be only 1 connected component
-        return dfs(0, -1) and len(visited) == n
-
+        return components == 1
