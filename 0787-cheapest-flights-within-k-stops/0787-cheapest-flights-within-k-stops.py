@@ -6,7 +6,8 @@ class Solution:
 
         for i in range(k+1): # think k = 0, then you can only reach to src neighbors
             temp_prices = prices.copy()
-
+# prices represents the current shortest distances (or cheapest prices) that are known from the source to each node at the beginning of the current iteration.
+# tmpPrices is used to store the updated distances (or cheapest prices) computed in this iteration.
             for start, dest, cost in flights:
                 if prices[start] == float("inf"): # this start point is not reachable yet
                     continue
