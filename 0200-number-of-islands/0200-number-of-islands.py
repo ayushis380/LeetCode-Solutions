@@ -5,21 +5,19 @@ class Solution:
 
         def dfs(r, c):
             if r >= rows or r < 0 or c >= cols or c < 0 or grid[r][c] != "1":
-                return
+                return 
             
-            grid[r][c] = "0"
+            grid[r][c] = "#"
+    
+            for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
+                nr, nc = r + dr, c + dc
+                dfs(nr, nc)
+            
+            return 1
 
-            check = ( dfs(r+1, c) or \
-            dfs(r-1, c) or \
-            dfs(r, c+1) or \
-            dfs(r, c-1) )
-
-            return check
-        
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == "1":
-                    dfs(r,c)
-                    islands += 1
+                    islands += dfs(r, c)
         
         return islands
