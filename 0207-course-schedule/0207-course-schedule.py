@@ -1,25 +1,21 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        # Kahns algo
+        adj = defaultdict(list)
         indegree = [0] * numCourses
-        adjlist = [[] for i in range(numCourses)]
-        queue = deque()
-        finish = 0
+        visited = 0
 
-        for course, prereq in prerequisites:
-            indegree[prereq] += 1
-            adjlist[course].append(prereq)
+        for course, preReq in prerequisites:
+            adj[course].append(preReq)
+            indegree[preReq] += 1
         
-        for i in range(numCourses):
-            if indegree[i] == 0:
-                queue.append(i)
-        
+        queue = deque([course for course in indegree if indegree[course] == 0])
+
         while queue:
-            finish += 1
             course = queue.popleft()
-            for nei in adjlist[course]:
+            visited += 1
+            for nei in adj[course]:
                 indegree[nei] -= 1
                 if indegree[nei] == 0:
                     queue.append(nei)
-            
-        return finish == numCourses
+        
+        return True if visited == numCourses else False
