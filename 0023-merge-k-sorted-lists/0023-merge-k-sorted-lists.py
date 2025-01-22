@@ -3,24 +3,28 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if not lists:
-            return None
-        
+
+        head = ListNode()
+        cur = head
         heap = []
-        for ind, node in enumerate(lists):
-            if node:
-                heapq.heappush(heap, (node.val, ind, node))
-        dummy = ListNode(0)
-        cur = dummy 
+
+        for i, lst in enumerate(lists):
+            if lst:
+                heapq.heappush(heap, (lst.val, i, lst)) # we need i for cases when ListNodes values are same, then heap checks on basis of i; otherwise ListNode (lst) would have been compared which is invalid
+        
+        heapq.heapify(heap)
 
         while heap:
-            val, ind, node = heapq.heappop(heap)
+            val, i, lst = heapq.heappop(heap)
+
+            node = ListNode(val)
             cur.next = node
-            cur = cur.next
-            if node.next:
-                heapq.heappush(heap, (node.next.val, ind, node.next))
+            cur = node
+
+            if lst.next:
+                heapq.heappush(heap, (lst.next.val, i, lst.next))
         
-        return dummy.next
+        return head.next
+
