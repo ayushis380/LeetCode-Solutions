@@ -1,29 +1,27 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        # Kahns Algo 
-        indegree = [0] * numCourses
-        adjlist = defaultdict(list)
-        schedule, finish = [], 0
+        adj = defaultdict(list)
         queue = deque()
+        ind = [0] * numCourses
+        order = []
 
         for course, pre in prerequisites:
-            adjlist[course].append(pre)
-            indegree[pre] += 1
+            adj[course].append(pre)
+            ind[pre] += 1
         
         for i in range(numCourses):
-            if indegree[i] == 0:
+            if ind[i] == 0:
                 queue.append(i)
         
         while queue:
-            course = queue.popleft()
-            schedule.append(course)
-            finish += 1
-            for nei in adjlist[course]:
-                indegree[nei] -= 1
-                if indegree[nei] == 0:
-                    queue.append(nei)
+            curlen = len(queue)
+            for i in range(curlen):
+                course = queue.popleft()
+                order.append(course)
+
+                for nei in adj[course]:
+                    ind[nei] -= 1
+                    if ind[nei] == 0:
+                        queue.append(nei)
         
-        if finish == numCourses: # check if able to finish all the courses
-            return schedule[::-1] # reverse as in queue we add courses which dont have an dependencies(indegree of 0)
-        else:
-            return []
+        return order[::-1] if len(order) == numCourses else []
