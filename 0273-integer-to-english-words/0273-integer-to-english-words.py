@@ -7,9 +7,9 @@ class Solution:
     def numberToWords(self, num: int) -> str:
         if num == 0:
             return "Zero"
-
+        
         def helper(num):
-            if num == 0:
+            if not num:
                 return ""
             elif num < 20:
                 return self.less_than_20[num] + " "
@@ -17,17 +17,17 @@ class Solution:
                 return self.tens[num // 10] + " " + helper(num % 10)
             else:
                 return self.less_than_20[num // 100] + " Hundred " + helper(num % 100)
-
-        res = ""
-        i = 0
+        
+        result = ""
+        i = 0 # dividing number into chunks of 3 
+        
         while num > 0:
             if num % 1000 != 0:
-                res = helper(num % 1000) + self.big[i] + " " + res
+                result = helper(num % 1000) + self.big[i] + " " + result
+            
             num //= 1000
             i += 1
+        
+        return result.strip()
 
-        return res.strip()
 
-# Example usage
-solution = Solution()
-print(solution.numberToWords(1234567))  # Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
