@@ -1,23 +1,31 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        dial = {
-            "2" : "abc",
-            "3" : "def",
-            "4" : "ghi",
-            "5" : "jkl",
-            "6" : "mno",
-            "7" : "pqrs",
-            "8" : "tuv",
-            "9" : "wxyz"
+        if not digits:
+            return []
+            
+        phone = {
+            "2": "abc",
+            "3": "def",
+            "4": "ghi",
+            "5": "jkl",
+            "6": "mno",
+            "7": "pqrs",
+            "8": "tuv",
+            "9": "wxyz",
         }
-        combinations = []
-        def backtrack(path, level):
-            if level == len(digits): # level = always 1 less than length, return when equal
-                combinations.append(path)
-                return 
-            for ch in dial[digits[level]]:
-                backtrack(path + ch, level +1)
+        result = []
 
-        if digits:
-            backtrack("", 0)
-        return combinations
+        def dfs(i, path):
+            if i >= len(digits):
+                result.append("".join(path.copy()))
+                return
+            
+            dt = phone[digits[i]] # value of d in map
+            
+            for ch in dt:
+                path.append(ch)
+                dfs(i+1, path)
+                path.pop()
+        
+        dfs(0, [])
+        return result
