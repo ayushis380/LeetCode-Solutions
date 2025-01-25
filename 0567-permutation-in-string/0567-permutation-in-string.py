@@ -1,25 +1,22 @@
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        # Frequency count of characters in s1
         s1_count = Counter(s1)
-        window_size = len(s1)
+        window = len(s1)
         window_count = Counter()
 
+        # maintain a window of size s1 
         for i in range(len(s2)):
-            # Add the current character to the window
+            
             window_count[s2[i]] += 1
+            start = i - window
 
-            # Remove the character that falls out of the window
-            if i >= window_size:
-                if window_count[s2[i - window_size]] == 1:
-                    del window_count[s2[i - window_size]]
+            if i >= window:
+                if window_count[s2[start]] == 1:
+                    del window_count[s2[start]] # 1 -1 = 0 so delete 
                 else:
-                    window_count[s2[i - window_size]] -= 1
-
-            # Check if the window matches the s1 frequency
-            if window_count == s1_count:
+                    window_count[s2[start]] -= 1 # otherwise decrease freq
+            
+            if s1_count == window_count:
                 return True
-
+        
         return False
-        
-        
