@@ -5,21 +5,17 @@
 #         self.next = next
 class Solution:
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        dummy = ListNode(0, head) # add dummy at start of head so that after all the steps, left is at (n-1) node from end
-        left = dummy
+        dummy = ListNode(0, head)
+        left = dummy  # create a diff of +1
         right = head
 
-        # keep distance of (n+1) in left and right - Two pointer approach
-        # move right by n times
-        # left started from -1 (1 left position to head)
-        while n > 0 and right:
+        while n > 0 and right: # move n steps
             right = right.next
             n -= 1
         
-        while right:
-            left = left.next 
-            right = right.next # till right reaches end
+        while right: # right and left has a distance of n nodes which places left at n -1 node which makes it easier to remove nth node from end
+            right = right.next
+            left = left.next # left starts late with +1 extra node
         
-        # delete the node
         left.next = left.next.next
-        return dummy.next 
+        return dummy.next
