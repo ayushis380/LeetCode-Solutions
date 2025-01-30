@@ -14,8 +14,6 @@ class Solution:
             if lst:
                 heapq.heappush(heap, (lst.val, i, lst)) # we need i for cases when ListNodes values are same, then heap checks on basis of i; otherwise ListNode (lst) would have been compared which is invalid
         
-        heapq.heapify(heap)
-
         while heap:
             val, i, lst = heapq.heappop(heap)
 
