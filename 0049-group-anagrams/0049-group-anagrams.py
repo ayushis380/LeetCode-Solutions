@@ -1,12 +1,15 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        # O(NKlogK) as we are sorting strings here
+        # O(NK) TC and SC, as we are counting for each 
         # K is the maximum length of a string
-        
-        group = defaultdict(list)
+        result = defaultdict(list)
 
         for s in strs:
-            key = "".join(sorted(s)) # sorted doesnt modify the string
-            group[key].append(s)
+            count = [0] * 26
+
+            for ch in s:
+                count[ord(ch) - ord('a')] += 1
+            
+            result[tuple(count)].append(s)
         
-        return list(group.values())
+        return list(result.values())
