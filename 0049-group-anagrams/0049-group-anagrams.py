@@ -1,5 +1,8 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        # O(NKlogK) as we are sorting strings here
+        # K is the maximum length of a string
+        
         group = defaultdict(list)
 
         for s in strs:
