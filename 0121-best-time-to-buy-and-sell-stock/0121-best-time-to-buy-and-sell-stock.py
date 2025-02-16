@@ -3,8 +3,9 @@ class Solution:
         profit = 0
         minprice = prices[0]
 
-        for prc in prices:
-            minprice = min(minprice, prc)
-            profit = max(profit, prc - minprice)
+        for p in prices:
+            minprice = min(minprice, p)
+            profit = max(profit, p - minprice)
         
         return profit
+
