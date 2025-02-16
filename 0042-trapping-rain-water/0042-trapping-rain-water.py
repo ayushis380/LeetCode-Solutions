@@ -1,25 +1,19 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        length = len(height)
-        # store max from each side 
-        left = [0] * length
-        right = [0] * length
+# we know the current bar (pointed by left) will never be affected by any bar on the right of right. This is because rmax is already greater than lmax, and future bars can only reduce the impact of rmax on water calculations.
+# even if the values are smaller in the middle it doesnt matter as we look for max values from both sides and then pick the minimum
+        left, right = 0, len(height) - 1
         water = 0
-
-        left[0], right[0] = height[0], height[length - 1]
-
-        for i in range(1, length):
-            left[i] = max(left[i-1], height[i-1])
-        
-        for i in range(length - 2, -1, -1):
-            right[i] = max(right[i+1], height[i+1])
-        
-        for i in range(length):
-            minval = min(left[i], right[i])
-            if minval > height[i]:
-                water += minval - height[i] 
+        lmax, rmax = height[left], height[right]
+    
+        while left < right:
+            if lmax < rmax:
+                left += 1
+                lmax = max(lmax, height[left])
+                water += lmax - height[left]
+            else:
+                right -= 1
+                rmax = max(rmax, height[right])
+                water += rmax - height[right]
         
         return water
-
-
-        
