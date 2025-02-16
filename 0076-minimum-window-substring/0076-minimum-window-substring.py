@@ -1,30 +1,42 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        indices, minlen = [-1,-1], float("inf")
-        start = 0 
+        if len(t) > len(s):
+            return ""
+        
+        result, minlen = [], float("inf")
+        s_count = defaultdict(int)
         t_count = Counter(t)
-        s_count = Counter()
-        need = len(t_count)
-        have = 0
+        need, have = len(t_count), 0
+        start = 0
 
-        for i in range(len(s)):
-            ch = s[i]
+        for end in range(len(s)):
+            ch = s[end]
             s_count[ch] += 1
 
-            if ch in t_count and s_count[ch] == t_count[ch]:
+            if ch in t_count and t_count[ch] == s_count[ch]:
                 have += 1
             
             while have == need:
-                if (i - start + 1 < minlen):
-                    minlen = i - start + 1
-                    indices = [start, i]
+                length = end - start + 1
                 
-                s_count[s[start]] -= 1
-                if s[start] in t_count and s_count[s[start]] < t_count[s[start]]:
+                if minlen > length:
+                    minlen = length
+                    result = s[start: end + 1]
+                
+                ch_start = s[start]
+                s_count[ch_start] -= 1
+
+                # only decrement when count of ch in s is less than the count in t
+                # it makes the window invalid
+                # if we have count greater than its fine
+                if ch_start in t_count and s_count[ch_start] < t_count[ch_start]:
                     have -= 1
                 
                 start += 1
         
-        l, r = indices
-        return s[l : r+1 ] if minlen != float("inf") else ""
+        return result if result != [] else ""
+            
+            
+            
 
+        
