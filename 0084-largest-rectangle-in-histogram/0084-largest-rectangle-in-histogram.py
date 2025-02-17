@@ -1,20 +1,22 @@
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
-        maxarea = 0
-        stack = [] # index, ht
+        length = len(heights)
+        stack = []
+        area = 0
 
-        for i, ht in enumerate(heights):
-            start = i # the start index of current height - this helps store till where it can be extended
-            while stack and stack[-1][1] > ht: # pop bigger values as they cant be extended
-                ipop, hpop = stack.pop()
-                maxarea = max(maxarea, hpop * (i - ipop)) # calculate their area
-                start = ipop  # extending to left for curr ht
+        for i, h in enumerate(heights):
+            start = i
+            while stack and stack[-1][1] > h:
+                i_old, h_old = stack.pop()
+                area = max(area, h_old * (i - i_old))
+                start = i_old
             
-            stack.append((start, ht))
+            stack.append((start, h))
         
-        # calculate area from left value in stack
-        # they got extended from end still start 
-        for start, ht in stack:
-            maxarea = max(maxarea, ht * (len(heights) - start))
+        for start, h in stack:
+            area = max(area, h * (length - start))
         
-        return maxarea
+        return area
+        
+
+
