@@ -7,18 +7,21 @@
 class Solution:
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         balanced = True
-        def dfs(root):
+        
+        def dfs(node):
             nonlocal balanced
-            if not root:
+
+            if not node:
                 return 0
             
-            leftsubtree = dfs(root.left)
-            rightsubtree = dfs(root.right)
+            leftSub = dfs(node.left)
+            rightSub = dfs(node.right)
 
-            if abs(leftsubtree - rightsubtree) > 1:
+            if abs(leftSub - rightSub) > 1:
                 balanced = False
-            
-            return 1 + max(leftsubtree, rightsubtree)
+
+            return 1 + max(leftSub, rightSub)
         
         dfs(root)
+        
         return balanced
