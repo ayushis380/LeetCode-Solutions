@@ -1,38 +1,31 @@
 class MedianFinder:
 
     def __init__(self):
-        # first half with smaller values: using maxheap
-        # second half with larger values: using minheap
+        # small is max heap, large is min heap
         self.small, self.large = [], []
-        
 
     def addNum(self, num: int) -> None:
-        # add to one of the halves
-        if self.large and num > self.large[0]: # comparing with large, no -1 multiplication req
+        if self.large and num > self.large[0]:
             heapq.heappush(self.large, num)
         else:
             heapq.heappush(self.small, -1 * num)
         
-        # adjust the length of halves, one half can only be greater by 1 in len
-        # dont forget to multiply by -1 for maxheap
-        if len(self.small) > len(self.large) + 1:
-            val = heapq.heappop(self.small)
-            heapq.heappush(self.large, -1 * val)
-        elif len(self.large) > len(self.small) + 1:
-            val = heapq.heappop(self.large)
-            heapq.heappush(self.small, -1 * val)
-
+        if len(self.large) > len(self.small) + 1:
+            val = -1 * heapq.heappop(self.large)
+            heapq.heappush(self.small, val)
+        elif len(self.small) > len(self.large) + 1:
+            val = -1 * heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
 
     def findMedian(self) -> float:
-        # first two conditions when heaps are unequal in size 
-        # then median lies in middle, which will be on the longer half
-        if len(self.small) > len(self.large):
-            return self.small[0] * -1
-        elif len(self.small) < len(self.large):
-            return self.large[0]
-        # when even length, then add two mid elements
+        if len(self.large) != len(self.small):
+            if len(self.large) > len(self.small):
+                return self.large[0]
+            else:
+                return -1 * self.small[0]
         else:
-            return (-1 * self.small[0] + self.large[0]) / 2
+            return (self.large[0] + (-1 * self.small[0]))/2
+
         
 
 
