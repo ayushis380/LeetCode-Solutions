@@ -13,8 +13,7 @@ class Solution:
             
             if not (minv < node.val < maxv):
                 return False
-            
-            return dfs(node.left, node.val, minv) and dfs(node.right, maxv, node.val)
 
-           
+            return dfs(node.left, node.val, minv) and dfs(node.right, maxv, node.val)
+        
         return dfs(root, float("inf"), float("-inf"))
