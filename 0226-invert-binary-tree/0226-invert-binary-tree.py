@@ -9,14 +9,13 @@ class Solution:
         
         def dfs(root):
             if not root:
-                return None
+                return 
+            dfs(root.left)
+            dfs(root.right)
             
-            left = dfs(root.left)
-            right = dfs(root.right)
-
-            root.left = right
-            root.right = left
-
-            return root
+            tmp = root.right
+            root.right = root.left
+            root.left = tmp
         
-        return dfs(root)
+        dfs(root)
+        return root
