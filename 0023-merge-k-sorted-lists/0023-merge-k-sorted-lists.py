@@ -5,24 +5,21 @@
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-
-        head = ListNode()
-        cur = head
+        dummy = ListNode(0)
+        cur = dummy
         heap = []
 
-        for i, lst in enumerate(lists):
-            if lst:
-                heapq.heappush(heap, (lst.val, i, lst)) # we need i for cases when ListNodes values are same, then heap checks on basis of i; otherwise ListNode (lst) would have been compared which is invalid
-        
-        while heap:
-            val, i, lst = heapq.heappop(heap)
+        for i, ls in enumerate(lists):
+            if ls:
+                heapq.heappush(heap, (ls.val, i, ls))
 
+        while heap:
+            val, i, ls = heapq.heappop(heap)
             node = ListNode(val)
             cur.next = node
             cur = node
 
-            if lst.next:
-                heapq.heappush(heap, (lst.next.val, i, lst.next))
+            if ls.next:
+                heapq.heappush(heap, (ls.next.val, i, ls.next))
         
-        return head.next
-
+        return dummy.next
