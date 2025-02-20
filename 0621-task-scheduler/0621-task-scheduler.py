@@ -1,22 +1,24 @@
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
-        count = Counter(tasks)
-        heap = [-cnt for cnt in count.values()]
-        heapify(heap)
+        freq = Counter(tasks)
+        heap = []
         queue = deque()
-
         time = 0
-        while queue or heap:
+
+        for val in freq.values():
+            heapq.heappush(heap, -1 * val)
+        
+        while heap or queue:
             time += 1
             if heap:
-                freq = heapq.heappop(heap)
-                freq += 1 # freq is negative
-                if freq: # if freq is 0 that means this char is complete
-                    queue.append((freq, time + n))
+                cnt = heapq.heappop(heap)
+                cnt += 1
+                if cnt:
+                    queue.append((cnt, time + n))
             
-            if queue and queue[0][1] == time:
-                heapq.heappush(heap, queue.popleft()[0])
+            if queue and time == queue[0][1]:
+                count, t = queue.popleft()
+                heapq.heappush(heap, count)
         
         return time
-
 
