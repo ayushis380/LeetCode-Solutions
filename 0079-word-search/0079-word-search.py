@@ -11,14 +11,15 @@ class Solution:
             
             visited = board[r][c]
             board[r][c] = "#"
-
-            res = ( dfs(r+1, c, i+1) or \
-            dfs(r-1, c, i+1) or \
-            dfs(r, c+1, i+1) or \
-            dfs(r, c-1, i+1) )
+            result = False
+            
+            for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
+                nr, nc = r + dr, c + dc
+                if dfs(nr, nc, i+1):
+                    result = True
             
             board[r][c] = visited
-            return res
+            return result
         
         for r in range(rows):
             for c in range(cols):
