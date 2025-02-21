@@ -1,20 +1,20 @@
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
-        subsets, path = [], []
+        result = []
 
-        def dfs(i):
+        def dfs(i, path):
             if i >= len(nums):
-                subsets.append(path.copy())
+                result.append(path.copy())
                 return
             
             path.append(nums[i])
-            dfs(i+1)
+            dfs(i+1, path)
 
             path.pop()
-            while (i+1) < len(nums) and nums[i] == nums[i+1]:
+            while i + 1 < len(nums) and nums[i] == nums[i+1]:
                 i += 1
-            dfs(i+1)
+            dfs(i+1, path)
         
-        dfs(0)
-        return subsets
+        dfs(0, [])
+        return result
