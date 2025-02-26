@@ -1,16 +1,16 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        adj = defaultdict(list)
+        finished, order = 0, []
+        adjlist = defaultdict(list)
+        indegree = [0] * numCourses
         queue = deque()
-        ind = [0] * numCourses
-        order = []
 
         for course, pre in prerequisites:
-            adj[course].append(pre)
-            ind[pre] += 1
+            adjlist[course].append(pre)
+            indegree[pre] += 1
         
         for i in range(numCourses):
-            if ind[i] == 0:
+            if indegree[i] == 0:
                 queue.append(i)
         
         while queue:
@@ -18,10 +18,10 @@ class Solution:
             for i in range(curlen):
                 course = queue.popleft()
                 order.append(course)
-
-                for nei in adj[course]:
-                    ind[nei] -= 1
-                    if ind[nei] == 0:
+                finished += 1
+                for nei in adjlist[course]:
+                    indegree[nei] -= 1
+                    if not indegree[nei]:
                         queue.append(nei)
         
-        return order[::-1] if len(order) == numCourses else []
+        return order[::-1] if finished == numCourses else []
