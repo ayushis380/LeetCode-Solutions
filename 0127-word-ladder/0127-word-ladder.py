@@ -1,42 +1,35 @@
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-    # BFS to find shortest path 
         if endWord not in wordList:
             return 0
-
-        adj = defaultdict(list)
-        wordList.append(beginWord) # its not there in dictionary, we need it to find patterns
+        
+        wordList.append(beginWord)
+        adjlist = defaultdict(list)
         queue = deque([beginWord])
-        length = 1 # we already have beginWord to start from 
+        steps = 1
         visited = set([beginWord])
 
-        # create patterns eg, hot has *ot, h*t, ho*. These will be the keys 
-        # we choose this as only one key can be different 
-        # words having same pattern will be connected, so its like building adjacency list of the graph
-        # notice each pattern can have multiple values so when accessing them we need to make sure the visited condition is not met, otherwise the popped word and word in adj can be same
-        
         for word in wordList:
-            for j in range(len(word)):
-                pattern = word[:j] + "*" + word[j+1:] # skip char at j and add * in place
-                adj[pattern].append(word)
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                adjlist[pattern].append(word)
         
         while queue:
             curlen = len(queue)
+
             for i in range(curlen):
                 word = queue.popleft()
+                
+                if word == endWord:
+                    return steps
 
-                if word == endWord: # reached word
-                    return length
-
-                for j in range(len(word)): # check for all neighbors of the popped word
+                for j in range(len(word)):
                     pattern = word[:j] + "*" + word[j+1:]
-                    for nei in adj[pattern]:
-                        if nei not in visited:
+                    for nei in adjlist[pattern]:
+                        if nei not in visited: # neighbors are the words which have same pattern
                             queue.append(nei)
                             visited.add(nei)
-            
-            length += 1
-        
+
+            steps += 1 # increment when done full step - we might not need to increase if condition matches already
+
         return 0
-
-
