@@ -1,15 +1,15 @@
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        presum = count = 0
-        sumarr = defaultdict(int)
-        sumarr[0] = 1
+        sumMap = {0 : 1}
+        presum = 0
+        count = 0
 
-        for i, val in enumerate(nums):
-            presum += val
+        for n in nums:
+            presum += n
 
-            if presum - k in sumarr:
-                count += sumarr[presum-k]
+            if presum - k in sumMap:
+                count += sumMap[presum - k]
             
-            sumarr[presum] += 1 # think if presum = x and we are looking for k then a presum whose value is (x-k) should be present 
+            sumMap[presum] = sumMap.get(presum, 0) + 1
         
         return count
