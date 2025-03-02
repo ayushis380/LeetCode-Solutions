@@ -1,12 +1,13 @@
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
-        # Reverse the matrix vertically
-        matrix.reverse()
+        # clockwise 90 degree # first row becomes last column
+        matrix.reverse() # 1st row -> last row 
 
-# inner loop starts the j index from i + 1 in the transpose step of the rotate method is to ensure that each element in the matrix is swapped only once and to avoid redundant swaps
-
-        # Transpose the matrix
-        for i in range(len(matrix)):
-            for j in range(i+1, len(matrix)):
+        for i in range(len(matrix)): # last row - > last column by transposing
+            for j in range(i+1, len(matrix)): # values at diagonal are same
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
-            
+        
+        # to flip horizontally, along vertical axis
+        # for row in matrix:
+        #     row.reverse()
+        
