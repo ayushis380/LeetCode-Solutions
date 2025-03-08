@@ -1,17 +1,17 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        reach = len(cost)
-        dp = [-1] * len(cost)
+        # below code doesnt consider if we start from 1st index
+        # length = len(cost)
 
-        def dfs(i):
-            if i >= reach:
-                return 0
-            
-            if dp[i] != -1:
-                return dp[i]
-            
-            dp[i] = cost[i] + min(dfs(i+1), dfs(i+2))
-            return dp[i]
+        # for i in range(2, length):
+        #     cost[i] += min(cost[i-1], cost[i-2])
         
-        dfs(0)
-        return min(dp[0], dp[1])
+        # return cost[length-1]
+
+        # we can either start from 0th or 1st index
+        length = len(cost)
+
+        for i in range(2, length):
+            cost[i] += min(cost[i-1], cost[i-2])
+        
+        return min(cost[length-1], cost[length-2])
