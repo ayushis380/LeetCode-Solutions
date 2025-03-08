@@ -1,27 +1,20 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
+        self.palin = ""
         self.maxlen = 0
-        self.maxpalin = ""
 
-        for i in range(len(s)):
-            self.palindrome(i, i, s)
-            self.palindrome(i, i+1, s)
+        for i in range((len(s))):
+            self.helper(i, i, s)
+            self.helper(i, i + 1, s)
         
-        return self.maxpalin
+        return self.palin
     
-    def palindrome(self, left, right, s):
-        result = ""
-        
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            curlen = right - left + 1
+    def helper(self, l, r, s):
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            if (r - l + 1) > self.maxlen:
+                self.palin = s[l: r+1]
+                self.maxlen = r - l + 1
             
-            if curlen > self.maxlen:
-                self.maxlen = curlen
-                result = s[left:right + 1]
+            l -= 1
+            r += 1
             
-            left -= 1
-            right += 1
-        
-        if len(result) == self.maxlen:
-            self.maxpalin = result
-    
