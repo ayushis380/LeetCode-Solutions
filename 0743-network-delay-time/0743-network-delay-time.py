@@ -1,26 +1,25 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        # bfs using min heap to calculate shortest distance
-        adj = defaultdict(list)
-
-        for u,v,w in times:
-            adj[u].append((v, w)) # u is source and v is destination
-
-        visited = set()
-        minh = [(0, k)] # starting from k
+        adjlist = defaultdict(list)
+        heap = [(0, k)] # it can have multiple entries for a node, as we can have multiple paths to reach a node but min heap ensures we take the minimum cost path
         delaytime = 0
+        visited = set() # helps check is node is already visited that means the node was already reached with a lower cost
 
-        while minh:
-            time, node = heapq.heappop(minh)
-            if node in visited:
+        for u, v, w in times:
+            adjlist[u].append((v,w))
+        
+        while heap:
+            time, node = heapq.heappop(heap)
+            if node in visited: # already visited means seen with a lower cost
                 continue
             
+            delaytime = max(delaytime, time) # max seen so far to reach all the nodes
             visited.add(node)
-            delaytime = max(delaytime, time) # max as we are adding the times seen so far
-
-            for neigh, t in adj[node]:
-                if neigh not in visited:
-                    heapq.heappush(minh, (time + t, neigh)) # time seen so far and new time 
+            
+            # going from source to the other nodes
+            for nei, weight in adjlist[node]:
+                if nei not in visited:
+                    heapq.heappush(heap, (time + weight, nei))
         
-       
+        # not necessarily that we reach all the nodes
         return delaytime if len(visited) == n else -1
