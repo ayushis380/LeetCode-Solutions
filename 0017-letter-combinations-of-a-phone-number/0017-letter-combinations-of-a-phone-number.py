@@ -13,21 +13,22 @@ class Solution:
             "8": "tuv",
             "9": "wxyz",
         }
+        
+        output = []
 
-        output, path = [], []
-
-        def dfs(i):
+        def dfs(i, path):
             if i >= len(digits):
                 output.append("".join(path.copy()))
                 return
-            
-            digit = digits[i]
-            dial = phone[digit]
-            for s in dial:
-                path.append(s)
-                dfs(i+1)
+
+            dgt = digits[i]
+            val = phone[dgt]
+
+            for ch in val:
+                path.append(ch)
+                dfs(i+1, path)
                 path.pop()
+            
         
-        dfs(0)
+        dfs(0, [])
         return output
-        
