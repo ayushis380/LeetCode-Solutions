@@ -5,10 +5,11 @@ class Solution:
         dp[length] = True
 
         for i in range(length - 1, -1, -1):
-            for word in wordDict:
+            for wrd in wordDict:
+                if i + len(wrd) <= length and s[i: i+len(wrd)] == wrd:
+                    dp[i] = dp[i+len(wrd)]
+                
                 if dp[i]:
                     break
-                if (i + len(word) <= length) and s[i: i + len(word)] == word:
-                    dp[i] = dp[i + len(word)]
-        
+        print(dp)
         return dp[0]
