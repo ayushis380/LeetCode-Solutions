@@ -1,17 +1,17 @@
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
-        # using a hash map instead of fixed size list
-        # better when unicode chars are more 
         if len(s) != len(t):
             return False
-
+        
         freq = defaultdict(int)
 
-        for i in range(len(s)):
-            freq[s[i]] += 1
-            freq[t[i]] -= 1
+        for ch in s:
+            freq[ch] += 1
         
-        for val in freq.values():
+        for ch in t:
+            freq[ch] -= 1
+        
+        for ch, val in freq.items():
             if val != 0:
                 return False
         
