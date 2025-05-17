@@ -7,9 +7,8 @@ class Solution:
         
         post = 1
 
-        for i in range(len(nums) - 1, -1, -1):
+        for i in range(len(nums) -1, -1, -1):
             product[i] *= post
             post *= nums[i]
         
         return product
-
