@@ -1,37 +1,25 @@
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        lens1, lens2 = len(s1), len(s2)
-        if lens1 > lens2:
+        if len(s1) > len(s2):
             return False
         
-        fs1, fs2 = [0] * 26, [0] * 26
-        
-        # to maintain window size of len(s1)
-        for i in range(lens1):
-            fs1[ ord(s1[i]) - ord('a') ] += 1
-            fs2[ ord(s2[i]) - ord('a') ] += 1
-        
-        for i in range(lens1, lens2):
-            if self.helper(fs1, fs2): # check if all values match
+        s1_ct = Counter(s1)
+        s2_ct = Counter()
+        start = 0
+
+        for end, ch in enumerate(s2):
+            ch_start = s2[start]
+            s2_ct[ch] += 1
+
+            if end >= len(s1):
+                s2_ct[ch_start] -= 1
+                start += 1
+
+                if s2_ct[ch_start] == 0:
+                    del s2_ct[ch_start]
+            
+            if s1_ct == s2_ct:
                 return True
             
-            # to maintain window size of len(s1) - increase freq of end char - new addition
-            # decrease window - decrease freq of start char 
-            ch_end = ord(s2[i]) - ord('a')
-            ch_start = ord(s2[i - lens1]) - ord('a')
+        return False
 
-            fs2[ch_end] += 1
-            fs2[ch_start] -= 1
-
-        return self.helper(fs1, fs2) # last window of len(s1)
-    
-    def helper(self, fs1, fs2):
-        count = 0
-
-        for i in range(26):
-            if fs1[i] == fs2[i]:
-                count += 1
-        
-        return True if count == 26 else False
-        
-        
