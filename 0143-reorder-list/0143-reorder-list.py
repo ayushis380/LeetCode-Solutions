@@ -5,26 +5,30 @@
 #         self.next = next
 class Solution:
     def reorderList(self, head: Optional[ListNode]) -> None:
+        # find mid point
         slow, fast = head, head.next
-        
+
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
-
-        cur = slow.next
-        prev = slow.next = None
-
-        while cur:
-            tmp = cur.next
-            cur.next = prev
-            prev = cur
-            cur = tmp
         
-        first, second = head, prev
+        # reverse second half
+        second = slow.next
+        slow.next = prev = None
+
         while second:
-            t1, t2 = first.next, second.next
+            temp = second.next
+            second.next = prev
+            prev = second
+            second = temp
+        
+        # merge both 
+        first, second = head, prev
+        
+        while second:
+            tmp1, tmp2 = first.next, second.next
             first.next = second
-            second.next = t1
-            first, second = t1, t2
+            second.next = tmp1
+            first, second = tmp1, tmp2
 
         
