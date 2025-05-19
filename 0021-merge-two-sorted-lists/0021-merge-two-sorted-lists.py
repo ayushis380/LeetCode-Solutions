@@ -24,4 +24,3 @@ class Solution:
             cur.next = list2
         
         return dummy.next
-        
