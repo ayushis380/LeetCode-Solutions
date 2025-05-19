@@ -3,18 +3,17 @@ class Solution:
         if len(t) > len(s):
             return ""
         
-        count_s = Counter()
-        count_t = Counter(t)
-        have, need = 0, len(count_t)
+        t_cnt = Counter(t)
+        s_cnt = Counter()
+        need, have = len(t_cnt), 0
         start = 0
-        l, r = -1, -1 
         minlen = float("inf")
+        left, right = -1, -1
 
-        for end in range(len(s)):
-            ch = s[end]
-            count_s[ch] += 1
+        for end, ch in enumerate(s):
+            s_cnt[ch] += 1
 
-            if ch in count_t and count_t[ch] == count_s[ch]: # if count_s[ch] >= count_t[ch], have not increased as it would have already been increased when they were equal - have shoulld be updated per new character
+            if ch in t_cnt and t_cnt[ch] == s_cnt[ch]:
                 have += 1
             
             while have == need:
@@ -22,14 +21,18 @@ class Solution:
                 
                 if minlen > length:
                     minlen = length
-                    l, r = start, end + 1
-
-                ch_st = s[start]
-                count_s[ch_st] -= 1 # have == need so decrease the window to look for a smaller window which satisfies this condition
-
-                if ch_st in count_t and count_s[ch_st] < count_t[ch_st]:
-                    have -= 1
+                    left, right = start, end + 1
                 
-                start += 1
+                ch_start = s[start]
+                s_cnt[ch_start] -= 1 # look for smaller window and see if count condition is still satisfied
+
+                if ch_start in t_cnt and s_cnt[ch_start] < t_cnt[ch_start]:
+                    have -= 1 # condition need to have >= : means freq of a character in s can be greater than freq of that same character in t but not less 
+                
+                start += 1 # keep decreasing the window - until have != need
         
-        return s[l : r]
+        return s[left: right]
+
+            
+
+
