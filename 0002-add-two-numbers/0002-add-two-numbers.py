@@ -14,11 +14,9 @@ class Solution:
             v2 = l2.val if l2 else 0
             total = v1 + v2 + carry
 
-            node = ListNode(total % 10)
+            cur.next = ListNode(total % 10)
+            cur = cur.next
             carry = total // 10
-
-            cur.next = node
-            cur = node
 
             if l1:
                 l1 = l1.next
@@ -26,4 +24,3 @@ class Solution:
                 l2 = l2.next
         
         return dummy.next
-
