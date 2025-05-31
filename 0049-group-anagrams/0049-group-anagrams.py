@@ -3,11 +3,11 @@ class Solution:
         result = defaultdict(list)
 
         for s in strs:
-            count = [0] * 26
+            arr = [0] * 26
 
             for ch in s:
-                count[ord(ch) - ord('a')] += 1
+                arr[ord(ch) - ord('a')] += 1
             
-            result[tuple(count)].append(s)
-        
+            result[tuple(arr)].append(s)
+
         return list(result.values())
