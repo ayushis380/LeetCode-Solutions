@@ -3,6 +3,7 @@ class NumMatrix:
     def __init__(self, matrix: List[List[int]]):
         rows, cols = len(matrix), len(matrix[0])
  # an extra row above and extra col on left for simplication - this matrix is store the prefix sum 
+ # useful when looking for first row and first col - finding topleft, topright and bottomleft values would be difficult - here these extras will give 0 value
         self.sumMat = [[0] * (cols + 1) for i in range(rows + 1)]
     # prefix sum by rows is stored 
     # above is for row above the current one 
