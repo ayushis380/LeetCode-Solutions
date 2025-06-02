@@ -5,14 +5,19 @@ class Solution:
 
         def dfs(r, c):
             if r >= rows or r < 0 or c >= cols or c < 0 or grid[r][c] == 0:
-                return 1 # Water or boundary contributes to perimeter
+                return 1
             
             if (r, c) in visited:
-                return 0 # Already visited, don't count again
+                return 0
             
-            visited.add((r, c))
+            visited.add((r,c))
+            perimeter = 0
 
-            return dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
+            for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
+                nr, nc = r + dr, c + dc
+                perimeter += dfs(nr, nc)
+
+            return perimeter
         
         for r in range(rows):
             for c in range(cols):
