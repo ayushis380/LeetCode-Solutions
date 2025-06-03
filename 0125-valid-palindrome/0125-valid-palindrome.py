@@ -1,18 +1,20 @@
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        low, high = 0, len(s) - 1 # high started from len(s) - 1 as we will be checking s[high] value in the while loop
+        low = 0
+        high = len(s) - 1
 
         while low < high:
-            while low < high and not s[low].isalnum():
+            while low < high and not s[low].isalnum(): # low <= high condition shouldnt come as it will make low and high out of bounds
                 low += 1
             
             while low < high and not s[high].isalnum():
                 high -= 1
             
+            print(low)
             if s[low].lower() != s[high].lower():
                 return False
-            
+        
             low += 1
-            high -= 1
+            high -=1
         
         return True
