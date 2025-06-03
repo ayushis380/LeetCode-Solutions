@@ -4,11 +4,12 @@ class Solution:
 
         def dfs(r, c):
             if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] != "O":
-                return
+                return 
             
-            board[r][c] = "T"
-            dfs(r + 1, c)
-            dfs(r - 1, c)
+            board[r][c] = "T" # all regions from boundaries
+
+            dfs(r +1, c)
+            dfs(r -1, c)
             dfs(r, c + 1)
             dfs(r, c - 1)
         
@@ -22,9 +23,7 @@ class Solution:
         
         for r in range(rows):
             for c in range(cols):
-                if board[r][c] == "O":
-                    board[r][c] = "X"
                 if board[r][c] == "T":
                     board[r][c] = "O"
-
-        
+                elif board[r][c] == "O":
+                    board[r][c] = "X"
