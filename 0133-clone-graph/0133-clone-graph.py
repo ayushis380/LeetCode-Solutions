@@ -9,14 +9,18 @@ class Node:
 from typing import Optional
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
-        oldToNew = {} # making a map for old to new (new has clone)
-        def clone(node):
-            if node in oldToNew:
-                return oldToNew[node] # if already there in map then clone already made, return clone copy
-            copy = Node(node.val)
-            oldToNew[node] = copy 
-            for nei in node.neighbors:
-                copy.neighbors.append(clone(nei)) # for each neighbors of node append to copy neighbors
-            return copy
-        
-        return clone(node) if node else None
+        visited = {} # old to new mapping
+
+        def dfs(n):
+            if n in visited:
+                return visited[n]
+            
+            clone = Node(n.val,[])
+            visited[n] = clone
+
+            for nei in n.neighbors:
+                clone.neighbors.append(dfs(nei))
+            
+            return clone
+
+        return dfs(node) if node else None
