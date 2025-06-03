@@ -1,23 +1,34 @@
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+#at any point during BFS, the queue never holds more than O(min(M, N)) elements at once, because: The BFS proceeds layer by layer (level-order), and Each cell adds only a few neighbors (up to 4)
+
+# So even if the entire island is one big line, the maximum simultaneous neighbors in the queue will never exceed the length of the shortest side of the grid.
+
         rows, cols = len(grid), len(grid[0])
-        total = 0
+        islands = 0
 
-        def dfs(r, c):
-            if r >= rows or r < 0 or c >= cols or c < 0 or grid[r][c] == "0":
-                return 0
-            
-            grid[r][c] = "0"
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == "1":
+                    islands += 1
+                    grid[r][c] = 0
+                    neighbors = []
+                    neighbors.append((r, c))
 
-            for dr, dc in [[-1,0],[1,0],[0,-1],[0,1]]:
-                nr, nc = r + dr, c + dc
-                dfs(nr, nc)
-            
-            return 1
+                    while neighbors:
+                        nr, nc = neighbors.pop(0)
+                        
+                        if nr -1 >=0 and grid[nr-1][nc] == "1":
+                            neighbors.append((nr -1, nc))
+                            grid[nr - 1][nc] = "0" # marking visited
+                        if nr +1 < rows and grid[nr + 1][nc] == "1":
+                            neighbors.append((nr + 1, nc))
+                            grid[nr + 1][nc] = "0"
+                        if nc -1 >=0 and grid[nr][nc -1] == "1":
+                            neighbors.append((nr, nc- 1))
+                            grid[nr][nc - 1] = "0"
+                        if nc +1 < cols and grid[nr][nc + 1] == "1":
+                            neighbors.append((nr, nc +1))
+                            grid[nr][nc + 1] = "0"
         
-        for i in range(rows):
-            for j in range(cols):
-                if grid[i][j] == "1":
-                    total += dfs(i,j)
-        
-        return total 
+        return islands
