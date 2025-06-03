@@ -2,18 +2,19 @@ class Solution:
     def validPalindrome(self, s: str) -> bool:
         low, high = 0, len(s) - 1
 
-        def is_Palindrome(low, high):
-            while low < high:
-                if s[low] != s[high]:
+        def check(l, h):
+            while l < h:
+                if s[l] != s[h]:
                     return False
-                low += 1
-                high -= 1
+                
+                l += 1
+                h -= 1
             
             return True
         
         while low < high:
             if s[low] != s[high]:
-                return is_Palindrome(low + 1, high) or is_Palindrome(low, high - 1)
+                return check(low +1, high) or check(low, high -1)
             
             low += 1
             high -= 1
