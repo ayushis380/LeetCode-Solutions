@@ -1,20 +1,21 @@
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
-       i = 0
-       n = len(nums)
-       k %= n
+        length = len(nums)
+        k %= length # within bound
 
-       self.reverse(0, nums, n-1) # full reverse
-       self.reverse(0, nums, k-1) # k elements reversed
-       self.reverse(k, nums, n-1)# n -k elements from end reversed 
+        start, count = 0, 0
+        # cyclic replacement
+    # start at 0, now 0 % k = 0, in each iter all indexes with i % k = 0 will be placed correctly
+    # then start is increased and set for all other indexes
+        while count < length:
+            current, prev = start, nums[start]
+            while True:
+                new_idx = (current + k) % length # new index 
+                nums[new_idx], prev = prev, nums[new_idx] # swap with previous value
+                current = new_idx # go to new index
+                count += 1 # only swaps required = length
 
-    #    nums.reverse()
-    #    nums[:k] = reversed(nums[:k])
-    
-    def reverse(self, start, nums, end):
-        while start < end:
-            nums[start], nums[end] = nums[end], nums[start]
-            start += 1
-            end -= 1
-
-        
+                if current == start: # reached from where we started
+                    break
+            
+            start += 1 # go to next index and place values
