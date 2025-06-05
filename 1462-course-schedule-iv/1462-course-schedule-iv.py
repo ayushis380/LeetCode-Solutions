@@ -1,25 +1,21 @@
 class Solution:
     def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
-        adj = [set() for _ in range(numCourses)]
-        preReq = [set() for _ in range(numCourses)]
-        indegree = [0] * numCourses
+        adj = defaultdict(list)
+        preReq = defaultdict(set) # map which stores all pre reqs of itself + the course 
 
         for pre, crs in prerequisites:
-            adj[pre].add(crs)
-            indegree[crs] += 1
+            adj[crs].append(pre) # course has list of pre reqs 
         
-        queue = deque([i for i in range(numCourses) if indegree[i] == 0])
-
-        while queue:
-            node = queue.popleft() # course with no dependencies are popped first 
-
-            for nei in adj[node]:
-                preReq[nei].add(node) # neighbors pre req is node, add that 
-                preReq[nei].update(preReq[node]) # add pre req of node, indirect prereq for nei
-# update() method is used to modify sets by adding elements from other iterables (like lists, tuples, or other sets)
+        def dfs(crs):
+            if crs not in preReq:
+                for pre in adj[crs]:
+                    preReq[crs] |= dfs(pre) # union of pre reqs
                 
-                indegree[nei] -= 1
-                if indegree[nei] == 0:
-                    queue.append(nei)
+                preReq[crs].add(crs) # adding the crs to its pre req map as it will be returned back to its other pre reqs eg A - > C -> D then D will return D to C and C will return C, D to A
+            
+            return preReq[crs]
+        
+        for crs in range(numCourses):
+            dfs(crs)
         
         return [u in preReq[v] for u, v in queries]
