@@ -1,29 +1,26 @@
 class Solution:
     def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
-    # Instead of starting BFS from 1, start from 0
-    # think when entire matrix is 1 except for corners with 10,000 cells = 10^8 TC 
-    # starting from 0 will give the same distance in an efficient way
-    # multi level BFS
+# If we start BFS from 1, we can only find the shortest distance for that 1. If we start BFS from 0, we could find the shortest distance for many 1 at a time. starting from 1 or 0 both will take x steps, but starting from 0 is efficient
 
-        matrix = mat # taking a copy, generally not considered good practice to modify the input, especially for arrays as they are passed by reference
+        matrix = mat
+        rows, cols = len(mat) , len(mat[0])
+        visited = set()
         queue = deque()
-        rows, cols = len(mat), len(mat[0])
-        visited = set() # we wont be visiting a cell twice, so O(m * n ) TC
 
         for r in range(rows):
             for c in range(cols):
                 if mat[r][c] == 0:
-                    queue.append((r, c, 0)) # 0 is the step, level 0 of BFS
+                    queue.append((r, c, 0))
                     visited.add((r, c))
         
         while queue:
-            r, c, steps = queue.popleft()
-            for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
-                nr, nc = r + dr, c + dc
+            r, c, level = queue.popleft()
 
+            for dr, dc in [[-1,0], [1,0], [0,-1], [0,1]]:
+                nr, nc = r + dr, c + dc
                 if 0 <= nr < rows and 0 <= nc < cols and (nr, nc) not in visited:
-                    matrix[nr][nc] = steps + 1 # updating the steps in copy matrix
-                    queue.append((nr, nc, steps + 1))
+                    matrix[nr][nc] = level + 1
+                    queue.append((nr, nc, level +1))
                     visited.add((nr, nc))
         
         return matrix
