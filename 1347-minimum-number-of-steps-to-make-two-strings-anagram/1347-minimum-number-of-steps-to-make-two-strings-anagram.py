@@ -1,5 +1,9 @@
 class Solution:
     def minSteps(self, s: str, t: str) -> int:
+# only need to focus on the positive value which implies that there are more instances of this character in t
+# the two values (the sum of the positive and negative differences) are equal in absolute value! 
+# The positive value comes from the character in t that needs to be replaced, the negative value comes from the character in s that waits for the corresponding replacement in t
+
         count = [0] * 26
         swaps = 0
 
