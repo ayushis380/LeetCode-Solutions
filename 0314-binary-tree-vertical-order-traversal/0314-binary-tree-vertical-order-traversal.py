@@ -10,6 +10,7 @@ class Solution:
 # the nodes should be ordered by column first, and further the nodes on the same column should be ordered vertically based on their row indices
         if not root:
             return []
+# For a binary tree, the maximum number of nodes at a level would be N+ 1/ 2, which is also the number of leafs in a full binary tree. As a result, in the worst case, our queue would consume at most O(N) space
         
         queue = deque([(root, 0)]) # node, col
         colMap = defaultdict(list)
