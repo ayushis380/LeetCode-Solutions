@@ -1,18 +1,18 @@
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
-        lastind = {}
+        lastind = {} # to store last index of a char
+        res = []
+        for i, c in enumerate(s):
+            lastind[c] = i 
         size, end = 0, 0
-        result = []
-
-        for ind, ch in enumerate(s):
-            lastind[ch] = ind
         
-        for ind, ch in enumerate(s):
+        for i, c in enumerate(s):
             size += 1
-            end = max(end, lastind[ch])
-
-            if end == ind:
-                result.append(size)
-                size = 0 
+            end = max(end, lastind[c]) # only update if max for new char
+            if end == i: # for atmost condition
+                res.append(size)
+                size = 0
         
-        return result
+        return res
+
+        
