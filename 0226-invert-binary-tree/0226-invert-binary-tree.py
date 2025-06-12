@@ -7,15 +7,14 @@
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         
-        def dfs(root):
-            if not root:
-                return 
-            dfs(root.left)
-            dfs(root.right)
+        def dfs(node):
+            if not node:
+                return
             
-            tmp = root.right
-            root.right = root.left
-            root.left = tmp
+            tmp = dfs(node.right)
+            node.right = dfs(node.left)
+            node.left = tmp
+            
+            return node
         
-        dfs(root)
-        return root
+        return dfs(root)
