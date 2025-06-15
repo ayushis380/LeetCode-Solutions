@@ -3,11 +3,11 @@ class Solution:
 # For each house, you want to find the nearest heater, and then compute the distance to it. The maximum of all these minimum distances will be your answer — because:
 # So, you need at least enough radius to reach the farthest house from its nearest heater
 
-        heaters.sort()
-        houses.sort()
+        heaters.sort() # O(m*log(m))
         radius = 0
 
-        for h in houses:
+        for h in houses: #O(n)
+            # Binary Search on the heaters array: log(m)
             idx = bisect.bisect_left(heaters, h) # bisect left then possible left index is returned
 
             # Distance to the left heater
@@ -20,4 +20,6 @@ class Solution:
             radius = max(radius, min_dist)
         
         return radius
+
+        # O((n+m)∗log(m))
         
