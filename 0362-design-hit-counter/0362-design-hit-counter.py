@@ -1,29 +1,28 @@
-class HitCounter:
+from collections import deque
 
+class HitCounter:
+# that all the timestamps that we will encounter are going to be in increasing order
+# we have to ignore the timestamps that occurred previously (having a difference of 300 or more with the latest timestamp)
     def __init__(self):
-        self.hitmap = deque() # ( ts, number of hits)
-        self.total = 0
+        self.hits = deque()  # stores (timestamp, count)
+        self.total = 0       # running total of hits in the last 300 seconds
 
     def hit(self, timestamp: int) -> None:
-        if self.hitmap and self.hitmap[-1][0] == timestamp:
-            self.hitmap[-1] = (timestamp, self.hitmap[-1][1] + 1)
+        # If the last timestamp is the same, just update count
+        if self.hits and self.hits[-1][0] == timestamp:
+            self.hits[-1] = (timestamp, self.hits[-1][1] + 1)
         else:
-            self.hitmap.append((timestamp, 1))
-        
+            self.hits.append((timestamp, 1))
+
         self.total += 1
         self._cleanup(timestamp)
-    
-    def _cleanup(self, timestamp):
-        while self.hitmap and self.hitmap[0][0] <= timestamp - 300:
-            old_ts, count = self.hitmap.popleft()
-            self.total -= count
 
     def getHits(self, timestamp: int) -> int:
         self._cleanup(timestamp)
         return self.total
 
-
-# Your HitCounter object will be instantiated and called as such:
-# obj = HitCounter()
-# obj.hit(timestamp)
-# param_2 = obj.getHits(timestamp)
+    def _cleanup(self, timestamp: int) -> None:
+        # Remove all entries older than 300 seconds
+        while self.hits and self.hits[0][0] <= timestamp - 300:
+            old_timestamp, count = self.hits.popleft()
+            self.total -= count
