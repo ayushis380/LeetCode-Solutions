@@ -10,24 +10,18 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
-    # O(N) since we process each node exactly once
-    # This is a perfect binary tree which means the last level contains N/2 nodes. The space complexity for breadth first traversal is the space occupied by the queue which is dependent upon the maximum number of nodes in particular level
-        if not root:
-            return root
-        queue = deque([root])
+        # at every level, we are connecting the children of that level
+        # using BFS without extra space
+        cur, nxt = root, root.left if root else None # start and next level start(left most)
 
-        while queue:
-            size = len(queue)
-            for i in range(size):
-                node = queue.popleft()
+        while cur and nxt:
+            cur.left.next = cur.right
+            if cur.next: # 2 has 3 as next
+                cur.right.next = cur.next.left # to link 5 to 6 in eg 1
             
-                if i < size - 1: # only go till size -1 as the last node points to Null
-                    node.next = queue[0] # top node of q
-                
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+            cur = cur.next # next node at current level, like a BFS
+            if not cur: # reached the end, eg after 3 there is nothing
+                cur = nxt # replace cur and nxt
+                nxt = cur.left # start of next level from left most
         
         return root
-
