@@ -6,7 +6,8 @@ class Solution:
             if i == len(s):
                 return 1 # its like dp[len(s)] = 1
             
-            if s[i] == '0' or i > len(s):
+            if s[i] == '0':
+                dp[i] = 0
                 return 0
             
             if dp[i] != -1:
@@ -21,4 +22,4 @@ class Solution:
         
         dfs(0)
         print(dp)
-        return dp[0]
+        return dfs(0)
