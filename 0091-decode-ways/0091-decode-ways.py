@@ -4,7 +4,7 @@ class Solution:
 
         def dfs(i):
             if i == len(s):
-                return 1
+                return 1 # its like dp[len(s)] = 1
             
             if s[i] == '0' or i > len(s):
                 return 0
@@ -19,4 +19,6 @@ class Solution:
             
             return dp[i]
         
-        return dfs(0)
+        dfs(0)
+        print(dp)
+        return dp[0]
