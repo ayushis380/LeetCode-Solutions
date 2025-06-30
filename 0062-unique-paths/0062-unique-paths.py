@@ -1,10 +1,16 @@
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        dp[m-1][n-1] = 1
+        dp = {}
 
-        for i in range(m-1, -1, -1):
-            for j in range(n-1, -1, -1):
-                dp[i][j] += dp[i+1][j] + dp[i][j+1]
+        def dfs(r, c):
+            if r == m-1 and c == n-1:
+                return 1
+            if r >= m or c >= n:
+                return 0
+            
+            if (r, c) not in dp:
+                dp[(r,c)] = dfs(r + 1, c) + dfs(r, c + 1)
+            
+            return dp[(r, c)]
         
-        return dp[0][0]
+        return dfs(0, 0)
