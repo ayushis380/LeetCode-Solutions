@@ -6,21 +6,20 @@ class FileSystem:
 
     def ls(self, path: str) -> List[str]:
         if path in self.files:
-            return [path.split("/")[-1]]
+            return [path.split("/")[-1]] # return list 
         else:
             return self.paths[path]
+        
 
     def mkdir(self, path: str) -> None:
-        directories = path.split("/")
-
-        for i in range(1, len(directories)):
-            cur = "/".join(directories[:i]) or "/"
-
-            if cur not in self.paths or directories[i] not in self.paths[cur]:
-                bisect.insort(self.paths[cur], directories[i])
+        dirc = path.split("/")
         
-        print("paths: ", self.paths)
-        print("files: ", self.files)
+        for i in range(1, len(dirc)):
+            cur = "/".join(dirc[:i]) or "/"
+
+            if cur not in self.paths or dirc[i] not in self.paths[cur]:
+                bisect.insort(self.paths[cur], dirc[i])
+        
 
     def addContentToFile(self, filePath: str, content: str) -> None:
         if filePath not in self.files:
