@@ -1,21 +1,15 @@
 class Solution:
     def maxDistToClosest(self, seats: List[int]) -> int:
-        person = (i for i, val in enumerate(seats) if val)
-        prev, future = None, next(person)
-        ans = 0
+        n = len(seats)
+        left = [n] * n 
+        right = [n] * n
 
         for i, seat in enumerate(seats):
-            if seat:
-                prev = i # takes future value, filled seat
-            else:
-            # future needs to take next filled seat which is greater than i
-            # while future and future < i - not used as future can be 0
-                while future is not None and future < i: 
-                    future = next(person, None)
-                
-                left = float("inf") if prev is None else i - prev
-                right = float("inf") if future is None else future - i
+            if seat: left[i] = 0 # when empty
+            elif i > 0: left[i] = left[i-1] + 1 # considering the dist for evry index
 
-                ans = max(ans, min(left, right))
+        for i in range(n-1, -1, -1):
+            if seats[i]: right[i] = 0
+            elif i < n-1: right[i] = right[i+1] + 1
         
-        return ans
+        return max(min(left[i], right[i]) for i in range(n))
