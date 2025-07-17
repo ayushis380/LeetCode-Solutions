@@ -1,46 +1,51 @@
 class TrieNode:
     def __init__(self):
+        self.endOfWord = False
         self.children = {}
-        self.isWord = False
-
-    def addWord(self, word):
-        cur = self
-        for c in word:
-            if c not in cur.children:
-                cur.children[c] = TrieNode()
-            cur = cur.children[c]
-        cur.isWord = True
 
 class Solution:
+    def __init__(self):
+        self.root = TrieNode()
+
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        root = TrieNode()
+        rows, cols = len(board), len(board[0])
+        result = []
+
+        # Build Trie
         for w in words:
-            root.addWord(w)
+            cur = self.root
+            for ch in w:
+                if ch not in cur.children:
+                    cur.children[ch] = TrieNode()
+                cur = cur.children[ch]
+            cur.endOfWord = True
 
-        ROWS, COLS = len(board), len(board[0])
-        res, visit = set(), set()
-
-        def dfs(r, c, node, word):
-            if (r < 0 or c < 0 or r >= ROWS or 
-                c >= COLS or (r, c) in visit or 
-                board[r][c] not in node.children
-            ):
+        def dfs(r, c, cur, w):
+            if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] not in cur.children:
                 return
 
-            visit.add((r, c))
-            node = node.children[board[r][c]]
-            word += board[r][c]
-            if node.isWord:
-                res.add(word)
+            ch = board[r][c]
+            w += ch
+            next_node = cur.children[ch]
+            board[r][c] = "#"
 
-            dfs(r + 1, c, node, word)
-            dfs(r - 1, c, node, word)
-            dfs(r, c + 1, node, word)
-            dfs(r, c - 1, node, word)
-            visit.remove((r, c))
+            if next_node.endOfWord:
+                result.append(w)
+                next_node.endOfWord = False  # Avoid duplicates
 
-        for r in range(ROWS):
-            for c in range(COLS):
-                dfs(r, c, root, "")
+            for dr, dc in [[-1, 0], [1, 0], [0, 1], [0, -1]]:
+                nr, nc = r + dr, c + dc
+                dfs(nr, nc, next_node, w)
 
-        return list(res)
+            board[r][c] = ch
+
+            # PRUNING STEP: If no children left after DFS, remove this node
+            if not next_node.children:
+                del cur.children[ch]
+
+        # Start DFS from each cell
+        for r in range(rows):
+            for c in range(cols):
+                dfs(r, c, self.root, "")
+
+        return result
