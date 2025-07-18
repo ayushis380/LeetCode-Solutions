@@ -1,10 +1,11 @@
 class Solution:
     def calculateTax(self, brackets: List[List[int]], income: int) -> float:
-        ans = prev = 0 
-        for hi, pct in brackets: 
-            hi = min(hi, income)
-            ans += (hi - prev)*pct/100
-            prev = hi 
-        return ans 
+        taxes = 0
+        total = 0
 
-
+        for upper, per in brackets:
+            amount = min(upper, income) - total
+            taxes += (amount * per) /100
+            total += amount
+        
+        return taxes
