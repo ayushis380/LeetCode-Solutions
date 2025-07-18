@@ -1,24 +1,27 @@
 class Solution:
     def minimumTime(self, n: int, relations: List[List[int]], time: List[int]) -> int:
-        max_times = {} # dp to check for already visited courses, course -> max time it took to complete
         adj = defaultdict(list)
+        queue = deque()
+        indegree = [0] * (n +1)
+        dp = [0] * (n+1)
 
-        for pr, nxt in relations:
-            adj[pr].append(nxt)
-
-        def dfs(src):
-            if src in max_times:
-                return max_times[src]
-            
-            res = time[src - 1] # own time
-            for nei in adj[src]:
-                res = max(res, time[src - 1] + dfs(nei)) # max from all nei of src
-            
-            max_times[src] = res
-            return res
+        for u, v in relations:
+            adj[u].append(v)
+            indegree[v] += 1
         
-        for i in range(1, n + 1):
-            dfs(i)
+        for i in range(1, n+1):
+            if indegree[i] == 0:
+                queue.append(i)
+                dp[i] = time[i-1]
 
-        return max(max_times.values()) # critical path which takes max time to complete
         
+        while queue:
+            crs = queue.popleft()
+            for nei in adj[crs]:
+                dp[nei] = max(dp[nei], dp[crs] + time[nei-1])
+                indegree[nei] -= 1
+                
+                if indegree[nei] == 0:
+                    queue.append(nei)
+        print(dp)
+        return max(dp)
