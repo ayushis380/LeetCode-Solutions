@@ -1,45 +1,44 @@
-from typing import List
-
 class Person:
-    def __init__(self, name: str):
+    def __init__(self, name):
         self.name = name
-        self.children = []   # List[Person]
-        self.alive = True    # True if alive, False if dead
+        self.dead = False
+        self.children = []
 
 class ThroneInheritance:
 
     def __init__(self, kingName: str):
-        # Create the root of the kingdom (the king)
         self.king = Person(kingName)
-        self.personMap = {kingName: self.king}  # name -> Person object
+        self.nameMap = {kingName : self.king} # name -> person
 
     def birth(self, parentName: str, childName: str) -> None:
-        """
-        Create a new Person node and add it to the parent's children.
-        """
-        parent = self.personMap[parentName]
         child = Person(childName)
+        parent = self.nameMap[parentName]
+
         parent.children.append(child)
-        self.personMap[childName] = child
+        self.nameMap[childName] = child
+        
 
     def death(self, name: str) -> None:
-        """
-        Mark a person as dead (but keep their children intact).
-        """
-        person = self.personMap[name]
-        person.alive = False
+        person = self.nameMap[name]
+        person.dead = True
 
     def getInheritanceOrder(self) -> List[str]:
-        """
-        Preorder DFS traversal to return inheritance order.
-        """
+        root = self.king
         order = []
 
-        def dfs(person: Person):
-            if person.alive:
-                order.append(person.name)
-            for child in person.children:
+        def dfs(p):
+            if not p.dead:
+                order.append(p.name)
+            for child in p.children:
                 dfs(child)
-
-        dfs(self.king)
+        
+        dfs(root)
         return order
+
+
+
+# Your ThroneInheritance object will be instantiated and called as such:
+# obj = ThroneInheritance(kingName)
+# obj.birth(parentName,childName)
+# obj.death(name)
+# param_3 = obj.getInheritanceOrder()
