@@ -1,17 +1,17 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        low, high = 0, len(height) - 1
-        lmax, rmax = height[low], height[high]
         water = 0
+        left, right = 0, len(height) - 1
+        lmax, rmax = height[left], height[right]
 
-        while low < high:
+        while left < right:
             if lmax < rmax:
-                low += 1 # think of lmax as the smaller value as compared to rmax - smaller value decides the amount of water stored 
-                lmax = max(lmax, height[low]) # comparing the max on left side to the height where we are at currently
-                water += lmax - height[low]
+                left += 1
+                lmax = max(lmax, height[left])
+                water += lmax - height[left]
             else:
-                high -= 1
-                rmax = max(rmax, height[high])
-                water += rmax - height[high]
+                right -= 1
+                rmax = max(rmax, height[right])
+                water += rmax - height[right]
         
         return water
