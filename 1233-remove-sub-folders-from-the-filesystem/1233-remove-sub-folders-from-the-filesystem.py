@@ -1,47 +1,29 @@
-class TrieNode():
-    def __init__(self):
-        self.isEndFolder = False
-        self.children = {}
-
 class Solution:
-    def __init__(self):
-        self.root = TrieNode()
-
-    def removeSubfolders(self, folder: List[str]) -> List[str]:
+    def removeSubfolders(self, folder) -> list[str]:
+        # Create a set to store all folder paths for fast lookup
+        folder_set = set(folder)
         result = []
-# Build Trie from folder paths
-        for f in folder:
-            cur = self.root
-            paths = f.split("/")
-            
-            for p in paths:
-                if not p:
-                    continue
-                if p not in cur.children:
-                    cur.children[p] = TrieNode()
-                cur = cur.children[p]
-        
-            cur.isEndFolder = True
-        
-        # Check each path for subfolders
-        for f in folder:
-            cur = self.root
-            paths = f.split("/")
-            isSubFolder = False #  to track if the current path is a sub-folder
 
-            for i, p in enumerate(paths):
-                if not p:
-                    continue
-        # the next node corresponding to the current folder name
-                cur = cur.children[p] 
-        
-    #if nextNode.isEndOfFolder is true and it is not the last folder in the path
-                if cur.isEndFolder and i != len(paths) - 1:
-                    isSubFolder = True
+        # Iterate through each folder to check if it's a sub-folder
+        for f in folder:
+            is_sub_folder = False
+            prefix = f
+
+            # Check all prefixes of the current folder path
+            while not prefix == "":
+                pos = prefix.rfind("/")
+                if pos == -1:
                     break
-            
-            if not isSubFolder:
-                result.append(f)
-        
-        return result
 
+                # Reduce the prefix to its parent folder
+                prefix = prefix[0:pos]
+
+                # If the parent folder exists in the set, mark as sub-folder
+                if prefix in folder_set:
+                    is_sub_folder = True
+                    break
+
+            # If not a sub-folder, add it to the result
+            if not is_sub_folder:
+                result.append(f)
+        return result
