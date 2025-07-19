@@ -9,7 +9,6 @@ class Solution:
         # decision tree will be pick or not pick wall - by paid painter
         dp = {}
 
-        @cache
         def dfs(i, remain):
             if remain <= 0:
                 return 0 # found a valid sol
