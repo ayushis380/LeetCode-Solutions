@@ -1,22 +1,24 @@
 class Solution:
     def maxEvents(self, events: List[List[int]]) -> int:
-        # events.sort(key = lambda x: (x[0], x[1]))
-# greedy strategy: if it's possible to attend both meetings i and j on day k, we should prioritize the one with the earlier end time
+        events.sort() # as per start day 
         n = len(events)
-        events.sort()
         maxDay = max([event[1] for event in events])
         pq = []
-        j, total = 0, 0
+        ind, attend = 0, 0
 
-        for i in range(1, maxDay + 1):
-            while j < n and events[j][0] <= i: # start day is less than or equal to i
-                heapq.heappush(pq, events[j][1]) # all meetings available to attend on day i or earlier
-                j += 1
-            while pq and pq[0] < i:
-                heapq.heappop(pq) # can no longer be attended
+        # pick all the days that can be started before current day 
+        # then remove events whose end day is less than current day as they cant be attended now
+        # if an event is left in pq, that means we can attend it - it got priorty over other events
+        for day in range(1, maxDay + 1):
+            while ind < n and events[ind][0] <= day:
+                heapq.heappush(pq, events[ind][1])
+                ind += 1
+            
+            while pq and pq[0] < day:
+                heapq.heappop(pq)
             
             if pq:
                 heapq.heappop(pq)
-                total += 1
+                attend += 1
         
-        return total
+        return attend
