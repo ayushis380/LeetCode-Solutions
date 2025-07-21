@@ -1,7 +1,7 @@
 class TrieNode:
     def __init__(self):
         self.children = {}
-        self.endOfWord = False
+        self.end = False
 
 class WordDictionary:
 
@@ -11,32 +11,33 @@ class WordDictionary:
     def addWord(self, word: str) -> None:
         cur = self.root
 
-        for c in word:
-            if c not in cur.children:
-                cur.children[c] = TrieNode()
-            cur = cur.children[c]
+        for ch in word:
+            if ch not in cur.children:
+                cur.children[ch] = TrieNode()
+            cur = cur.children[ch]
         
-        cur.endOfWord = True
+        cur.end = True
 
     def search(self, word: str) -> bool:
-        def dfs(j, root):
+
+        def dfs(i, root):
             cur = root
+            
+            for j in range(i, len(word)):
+                ch = word[j]
 
-            for i in range(j, len(word)):
-                c = word[i]
-
-                if c == ".":
-                    for child in cur.children.values():
-                        if dfs(i + 1, child):
-                            return True
+                if ch == ".":
+                    for child in cur.children.values(): # need to explore all children of cur
+                        if dfs(j + 1, child): # if . then do dfs()
+                            return True # if any yield True then return 
                     return False
                 else:
-                    if c not in cur.children:
+                    if ch not in cur.children:
                         return False
-                    cur = cur.children[c]
+                    cur = cur.children[ch] # next children of cur, checked within same for loop, dfs() not required
             
-            return cur.endOfWord
-        
+            return cur.end # once the length is reached, end depicts if the word is present or not
+
         return dfs(0, self.root)
         
 
