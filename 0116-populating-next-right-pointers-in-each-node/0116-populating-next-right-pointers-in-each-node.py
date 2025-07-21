@@ -10,18 +10,19 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
-        # at every level, we are connecting the children of that level
-        # using BFS without extra space
-        cur, nxt = root, root.left if root else None # start and next level start(left most)
+        if not root:
+            return None
+        
+        cur, nxt = root, root.left if root else None
 
         while cur and nxt:
             cur.left.next = cur.right
-            if cur.next: # 2 has 3 as next
-                cur.right.next = cur.next.left # to link 5 to 6 in eg 1
+            if cur.next:
+                cur.right.next = cur.next.left
             
-            cur = cur.next # next node at current level, like a BFS
-            if not cur: # reached the end, eg after 3 there is nothing
-                cur = nxt # replace cur and nxt
-                nxt = cur.left # start of next level from left most
+            cur = cur.next
+            if not cur:
+                cur = nxt
+                nxt = cur.left
         
         return root
