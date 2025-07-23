@@ -16,11 +16,9 @@ class Solution:
                 elif prev == "-":
                     stack.append(-num)
                 elif prev == "*":
-                    v1 = stack.pop()
-                    stack.append(v1 * num)
+                    stack.append(stack.pop() * num)
                 elif prev == "/":
-                    v1 = stack.pop()
-                    stack.append( int(v1/ num))
+                    stack.append(int(stack.pop() /num))
                 
                 prev = ch
                 num = 0
