@@ -1,26 +1,26 @@
 class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
-        # Memoization decrease TC 
-        # TC and SC is O(n * m)
-        # if a cell is visited once it wont be visited twice as its result is stored in dp
         rows, cols = len(matrix), len(matrix[0])
-        dp = [[-1] * cols for _ in range(rows)]
-        pathlen = 0
+        dp = {}
+        maxlen = float("-inf")
 
-        def dfs(r, c, prevVal):
-            if r >= rows or r < 0 or c >= cols or c < 0 or matrix[r][c] <= prevVal:
+        def dfs(r, c, prev):
+            if r >= rows or r < 0 or c >= cols or c < 0 or matrix[r][c] <= prev:
                 return 0
             
-            if dp[r][c] != -1: # return if already calculated
-                return dp[r][c]
+            if (r, c) in dp:
+                return dp[(r, c)]
             
-            dp[r][c] = 1 + max( dfs(r+1,c, matrix[r][c]), dfs(r-1, c, matrix[r][c]), \
-            dfs(r, c+1,matrix[r][c]), dfs(r, c-1, matrix[r][c]))
+            max_len = 0
+            for dr, dc in [(-1,0), (1,0), (0,1), (0,-1)]:
+                nr, nc = r + dr, c + dc
+                max_len = max(max_len, dfs(nr, nc, matrix[r][c]))
             
-            return dp[r][c]
-        
+            dp[(r, c)] = 1 + max_len
+            return dp[(r, c)]
+
         for r in range(rows):
             for c in range(cols):
-                pathlen = max(pathlen, dfs(r, c, -1))
+                maxlen = max(maxlen, dfs(r, c, -1))
         
-        return pathlen
+        return maxlen
