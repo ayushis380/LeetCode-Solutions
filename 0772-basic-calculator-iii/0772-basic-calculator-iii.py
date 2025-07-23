@@ -2,30 +2,28 @@ class Solution:
     def calculate(self, s: str) -> int:
         def helper(it):
             stack = []
+            prev = "+"
             num = 0
-            prev_op = "+"
 
             while it < len(s):
                 ch = s[it]
-
                 if ch.isdigit():
                     num = num * 10 + int(ch)
                 elif ch == '(':
                     it, num = helper(it + 1)
-                    
-                # it == len(s) - 1) → you're out of characters, so do the pending operation with num.
-                if not ch.isdigit() or it == len(s) - 1 or ch == ')':
-                    if prev_op == '+':
+                
+                if not ch.isdigit() or it == len(s) - 1:
+                    if prev == "+":
                         stack.append(num)
-                    elif prev_op == '-':
+                    elif prev == "-":
                         stack.append(-num)
-                    elif prev_op == '*':
-                        stack.append(stack.pop() * num)
-                    elif prev_op == '/':
-                        stack.append(int(stack.pop() / num))
+                    elif prev == "*":
+                        stack.append(num * stack.pop())
+                    elif prev == "/":
+                        stack.append(int(stack.pop()/ num))
                     
                     num = 0
-                    prev_op = ch
+                    prev = ch
 
                     if ch == ')':
                         return it, sum(stack)
@@ -36,3 +34,6 @@ class Solution:
         
         return helper(0)[1]
 
+
+
+        
