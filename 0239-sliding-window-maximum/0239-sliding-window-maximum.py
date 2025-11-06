@@ -1,28 +1,22 @@
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        queue = deque() # monotonic decreasing 
-        l, r = 0, 0
+        # monotonic dec q
+        q = deque()
         result = []
-    # performing popleft and pop on queue
-    # both pop values from different ends
+        l, r = 0, 0
 
         while r < len(nums):
-            while queue and nums[r] > nums[queue[-1]]:
-                queue.pop() # removing the top element - on rightmost
+            while q and nums[q[-1]] < nums[r]:
+                q.pop()
             
-            queue.append(r)
+            q.append(r)
 
-            # shift in window 
-            if l > queue[0]: # means we have already added this nums[queue[0]] value to output and its ok to pop it
-                queue.popleft() # removing first value - on leftmost
-
+            if l > q[0]:
+                q.popleft() 
             if r >= k - 1:
-                # see we are not popping value from queue 
-                # so to make sure the values are from l - r window, we do a check l > queue[0]
-                result.append(nums[queue[0]]) # first value is the largest
-                l += 1
+                result.append(nums[q[0]]) # we are not popping from q, as the value can still be used in future
+                l += 1 # already considered - window
             
             r += 1
         
-        return result 
-
+        return result
