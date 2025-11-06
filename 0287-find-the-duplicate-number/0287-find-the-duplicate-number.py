@@ -1,18 +1,17 @@
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        slow, fast = nums[0], nums[0]
-        
-        # find the cycle
+        slow, fast = 0, 0 # pick 0 as it wont cause cycle
+
         while True:
             slow = nums[slow]
             fast = nums[nums[fast]]
+
             if slow == fast:
                 break
         
-        slow1 = nums[0]
-
-        while slow1 != slow:
+        nslow = 0
+        while slow != nslow:
             slow = nums[slow]
-            slow1 = nums[slow1]
+            nslow = nums[nslow]
         
-        return slow
+        return nslow
