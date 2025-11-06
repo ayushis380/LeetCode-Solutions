@@ -1,39 +1,28 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-
-        indices, minw = [-1, -1], float("inf")
-        window, countT = {}, {} # window is to count freq in valid window 
+        s_ct = Counter()
+        t_ct = Counter(t)
         start = 0
+        have, need = 0, len(t_ct)
+        minlen = float("inf")
+        l, r = -1, -1
 
-        # get unique chars from t, which we need
-        for i in range(len(t)):
-            countT[t[i]] = countT.get(t[i], 0) + 1
-        
-        # once have == need, shrink window to look for smaller window
-        have, need = 0, len(countT)
-
-        for end in range(len(s)):
-            ch = s[end]
-            window[ch] = window.get(ch, 0) + 1 
-
-            if ch in countT and window[ch] == countT[ch]:
-                have += 1 # match
+        for i, ch in enumerate(s):
+            s_ct[ch] += 1
+            if ch in t_ct and s_ct[ch] == t_ct[ch]:
+                have += 1
             
             while have == need:
-                if (end - start + 1) < minw: # update window if small one found
-                    indices = [start, end]
-                    minw = end - start + 1
+                length = i - start + 1
+                if minlen > length:
+                    minlen = length
+                    l, r = start, i
                 
-                window[s[start]] -= 1 # shrink window
-                # check if window is still valid, otherwise have should be reduced
-                # window[character] >= countT[character] if this is true then have cond is fulfilled
-                # window has atleast those characters required by string t
-                # more freq means duplication in string s 
-                if s[start] in countT and window[s[start]] < countT[s[start]]:
+                ch_start = s[start]
+                s_ct[ch_start] -= 1
+                if ch_start in t_ct and s_ct[ch_start] < t_ct[ch_start]:
                     have -= 1
+                
                 start += 1
         
-        l, r = indices
-        return s[l: r+1] if minw != float("inf") else ""
-
-
+        return s[l: r+1]
