@@ -9,19 +9,20 @@ class Solution:
             return None
         
         heap = []
-        dummy = ListNode(-1)
+        dummy = ListNode()
         cur = dummy
 
-        for i, lst in enumerate(lists):
-            if lst:
-                heapq.heappush(heap, (lst.val, i, lst))
+        for i, ls in enumerate(lists):
+            if ls:
+                heapq.heappush(heap, (ls.val, i, ls))
         
         while heap:
-            val, i, lst = heapq.heappop(heap)
-            cur.next = ListNode(val)
-            cur = cur.next
+            val, ind, ls = heapq.heappop(heap)
+            node = ListNode(val)
+            cur.next = node
+            cur = node
 
-            if lst.next:
-                heapq.heappush(heap, (lst.next.val, i, lst.next))
+            if ls.next:
+                heapq.heappush(heap, (ls.next.val, ind, ls.next))
         
         return dummy.next
