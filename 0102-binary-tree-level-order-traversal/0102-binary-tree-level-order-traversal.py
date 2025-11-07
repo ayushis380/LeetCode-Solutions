@@ -6,9 +6,11 @@
 #         self.right = right
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+    
         levels = []
         queue = deque([root])
-
         while queue:
             curlen = len(queue)
             lvl = []
