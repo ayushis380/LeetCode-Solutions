@@ -1,15 +1,17 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        if len(nums) == 0:
+        if not nums:
             return [[]]
         
-        perms = self.permute(nums[1:])
-        output = []
+        arr = self.permute(nums[1:])
+        result = []
         
-        for p in perms:
-            for i in range(len(p) + 1):
-                p_copy = p.copy()
-                p_copy.insert(i, nums[0])
-                output.append(p_copy)
+        for ls in arr:
+            for i in range(len(ls) + 1):
+                cpy = ls.copy() # for every value in ls, a copy a created to insert nums[0]
+                cpy.insert(i, nums[0])
+                result.append(cpy)
         
-        return output
+        return result
+
+
