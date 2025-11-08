@@ -1,25 +1,22 @@
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        pairs = []
-        p = []
-        check = []
-    
-        def dfs(open, close):
-            if open == close == n:
-                pairs.append("".join(p))
-                check.append(p.copy())
+        current = []
+        combinations = []
+
+        def backtrack(openN, closeN):
+            if openN == closeN == n:
+                combinations.append("".join(current))
                 return
             
-            if open < n:
-                p.append('(')
-                dfs(open + 1, close)
-                p.pop()
+            if openN < n:
+                current.append('(')
+                backtrack(openN +1, closeN)
+                current.pop()
             
-            if close < open:
-                p.append(')')
-                dfs(open, close + 1)
-                p.pop()
+            if closeN < openN:
+                current.append(')')
+                backtrack(openN, closeN + 1)
+                current.pop()
         
-        dfs(0, 0)
-        print(check)
-        return pairs
+        backtrack(0,0)
+        return combinations
