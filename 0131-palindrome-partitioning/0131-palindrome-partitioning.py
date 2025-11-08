@@ -1,31 +1,28 @@
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        output, path = [], []
+        path = []
+        result = []
 
-        def dfs(i):
-            if i >= len(s):
-                output.append(path.copy())
+        def dfs(start):
+            if start >= len(s):
+                result.append(path.copy())
                 return
             
-            for j in range(i, len(s)):
-                if self.isPali(s, i, j):
-                # substring s[i:j+1] has already been included in the current path
-                    path.append(s[i:j+1])
-            # continues to partition the remainder of the string starting from the index j+1
-                    dfs(j+1) 
-                    
-            # removes the last added substring (s[i:j+1]) from the current path, 
-            # allowing the function to backtrack and try other potential partitions.
+            for end in range(start, len(s)): # i is start of string, j is end of string(within i to len(s)) - explore all possible strings
+                if self.check(start, end, s):
+                    path.append(s[start : end+ 1])
+                    dfs(end + 1) # end+1 becomes the start index for the next recursive call.
                     path.pop()
-            
+        
         dfs(0)
-        return output
+        return result
     
-    def isPali(self, s, l, r):
-        while l < r:
-            if s[l] != s[r]:
+    def check(self, l, h, s):
+        while l < h:
+            if s[l] != s[h]:
                 return False
+            
             l += 1
-            r -= 1
+            h -= 1
         
         return True
