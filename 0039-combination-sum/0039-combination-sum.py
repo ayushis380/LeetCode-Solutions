@@ -1,23 +1,21 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        combinations = []
+        result = []
         path = []
 
-        def dfs(totalsum, i):
-            if totalsum == target:
-                combinations.append(path.copy())
-                return
-
-            if totalsum > target or i >= len(candidates):
+        def dfs(i, total):
+            if total == target:
+                result.append(path.copy())
                 return
             
-            # here totalsum is unchanged, we are adding a value to it
+            if i >= len(candidates) or total > target:
+                return
+            
             path.append(candidates[i])
-            dfs(totalsum + candidates[i], i)
+            dfs(i, total + candidates[i])
 
             path.pop()
-            dfs(totalsum, i+1) # as totalsum is unchanged so need to substract candidates[i] from it
+            dfs(i + 1, total)
         
-        dfs(0,0)
-
-        return combinations
+        dfs(0, 0)
+        return result
