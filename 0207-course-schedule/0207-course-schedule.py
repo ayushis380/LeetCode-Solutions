@@ -1,23 +1,22 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        adj = defaultdict(list)
-        finished = 0
+        adjlist = defaultdict(list)
         indegree = [0] * numCourses
-        queue = deque()
 
-        for crs, pre in prerequisites:
-            adj[pre].append(crs)
-            indegree[crs] += 1
+        for course, prereq in prerequisites:
+            adjlist[prereq].append(course)
+            indegree[course] += 1
         
         queue = deque([i for i in range(numCourses) if indegree[i] == 0])
+        taken = 0
 
         while queue:
-            crs = queue.popleft()
-            finished += 1
+            taken += 1
+            course = queue.popleft()
 
-            for nei in adj[crs]:
+            for nei in adjlist[course]:
                 indegree[nei] -= 1
                 if indegree[nei] == 0:
                     queue.append(nei)
         
-        return True if finished == numCourses else False
+        return taken == numCourses
