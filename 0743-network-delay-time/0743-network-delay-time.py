@@ -1,24 +1,26 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        adj = defaultdict(list)
+        adjlist = defaultdict(list)
+        heap = []
+        heapq.heappush(heap, (0, k)) # start from k
+        allReached = 0
         visited = set()
-        heap = [(0, k)]
-        delaytime = 0
 
         for u, v, w in times:
-            adj[u].append((v, w))
+            adjlist[u].append((v, w))
 
         while heap:
             time, node = heapq.heappop(heap)
-            if node in visited:
+    # a node can be reached through multiple paths - all possible time values are added to the heap, if its already visited then ignore as this time will impact the final result time
+            if node in visited: 
                 continue
             
-            delaytime = max(delaytime, time)
+            allReached = max(allReached, time)
             visited.add(node)
-
-            for nei, wt in adj[node]:
+            
+            for nei, t in adjlist[node]:
                 if nei not in visited:
-                    heapq.heappush(heap, (time + wt, nei))
+                    heapq.heappush(heap, (time + t, nei))
         
-        return delaytime if len(visited) == n else -1 
+        return allReached if len(visited) == n else -1
 
