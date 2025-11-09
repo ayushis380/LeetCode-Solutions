@@ -7,11 +7,17 @@ class Solution:
             for c in range(cols):
                 if rooms[r][c] == 0:
                     queue.append((r, c, 0))
-        
+                    
         while queue:
-            r, c, dist = queue.popleft()
-            for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < rows and 0 <= nc < cols and rooms[nr][nc] == 2147483647:
-                    queue.append((nr, nc, dist + 1))
-                    rooms[nr][nc] = dist + 1
+            curlen = len(queue)
+            
+            for _ in range(curlen):
+                r, c, dist = queue.popleft()
+                for dr, dc in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and rooms[nr][nc] == 2147483647:
+                        rooms[nr][nc] = dist + 1
+                        queue.append((nr, nc, dist + 1))
+    
+
+        
