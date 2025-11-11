@@ -8,12 +8,10 @@ class Solution:
         size = 0
         end = 0
         for i in range(len(s)):
+            size += 1
             end = max(end, lastInd[s[i]])
-            if end > i:
-                size += 1
-            else:
-                result.append(size+1)
+            if end == i: # when the max index of a sring is reached 
+                result.append(size)
                 size = 0
-                end = 0
 
         return result
