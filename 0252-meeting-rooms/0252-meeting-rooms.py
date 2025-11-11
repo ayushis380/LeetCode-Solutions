@@ -3,9 +3,7 @@ class Solution:
         intervals.sort(key = lambda x: x[0])
 
         for i in range(1, len(intervals)):
-            start = intervals[i][0]
-
-            if start < intervals[i-1][1]:
+            if intervals[i-1][1] > intervals[i][0]: # end of old > start of new
                 return False
         
         return True
