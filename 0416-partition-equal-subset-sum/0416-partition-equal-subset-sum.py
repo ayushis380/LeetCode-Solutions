@@ -4,18 +4,21 @@ class Solution:
         if total % 2:
             return False
         
-        dp = set([0])
+        dp = set([0]) # sum possible
+        target = total//2
 
-        for val in nums:
-            new_dp = set()
-
-            for s in dp:
-                if s + val == total//2:
+        for i in range(len(nums)):
+            tdp = set()
+            for v in dp:
+                sumNum = v + nums[i]
+                if sumNum == target:
                     return True
                 
-                new_dp.add(s + val)
-                new_dp.add(s)
-            
-            dp = new_dp
+                tdp.add(v)
+                tdp.add(sumNum)
+
+            dp = tdp
         
         return False
+
+                
