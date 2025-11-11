@@ -1,6 +1,7 @@
 class Solution:
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
-        if len(hand) % groupSize:
+        n = len(hand)
+        if n % groupSize:
             return False
         
         freq = Counter(hand)
@@ -8,8 +9,8 @@ class Solution:
         heapq.heapify(heap)
 
         while heap:
-            val = heap[0]
-            for i in range(val, val + groupSize):
+            card = heap[0]
+            for i in range(card, card + groupSize):
                 if i not in freq:
                     return False
                 
@@ -20,3 +21,4 @@ class Solution:
                     heapq.heappop(heap)
         
         return True
+                
