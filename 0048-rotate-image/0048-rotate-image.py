@@ -1,13 +1,15 @@
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
-        # clockwise 90 degree # first row becomes last column
-        matrix.reverse() # 1st row -> last row 
+        m, n = len(matrix), len(matrix[0])
 
-        for i in range(len(matrix)): # last row - > last column by transposing
-            for j in range(i+1, len(matrix)): # values at diagonal are same
-                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        for i in range(m//2):
+            tmp = matrix[i]
+            matrix[i] = matrix[m - i -1]
+            matrix[m -i - 1] = tmp
         
-        # to flip horizontally, along vertical axis
-        # for row in matrix:
-        #     row.reverse()
+        # print(matrix)
+        for i in range(m):
+            for j in range(i+1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
         
