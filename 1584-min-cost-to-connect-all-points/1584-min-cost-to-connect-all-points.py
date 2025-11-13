@@ -1,34 +1,31 @@
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
-        # Prims algo, vertex based, ElogV, for dense graphs
-        # start from any node - as tree will be connected 
+        # prims
+        n = len(points)
         adjlist = defaultdict(list)
-        minheap, n = [(0,0)], len(points)
-        totalCost = 0
         visited = set()
+        heap = [(0, 0)]
+        cost = 0
 
         for i in range(n):
             x1, y1 = points[i]
-            for j in range(i + 1, n):
+            for j in range(i +1, n):
                 x2, y2 = points[j]
-                val = abs(x1-x2) + abs(y1-y2)
-                
-                adjlist[i].append((val, j))
-                adjlist[j].append((val, i))
-
-        while len(visited) < n:
-            cost, node = heapq.heappop(minheap)
-            if node in visited: # multiple ways to reach a node, but if already visited then its lowest wt must have been considered
+                dist = abs(x1 - x2) + abs(y1 - y2)
+                adjlist[i].append((j, dist))
+                adjlist[j].append((i, dist))
+        
+        while heap:
+            dst, pt = heapq.heappop(heap)
+            if len(visited) == n:
+                return cost
+            if pt in visited:
                 continue
             
-            visited.add(node)
-            totalCost += cost
-            
-            for dist, nei in adjlist[node]:
+            cost += dst
+            visited.add(pt)
+            for nei, wt in adjlist[pt]:
                 if nei not in visited:
-                    heapq.heappush(minheap, (dist, nei))
+                    heapq.heappush(heap, (wt, nei))
         
-        return totalCost
-
-
-
+        return cost
