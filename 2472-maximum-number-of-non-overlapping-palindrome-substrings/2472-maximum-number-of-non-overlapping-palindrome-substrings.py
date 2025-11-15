@@ -1,20 +1,24 @@
 class Solution:
     def maxPalindromes(self, S: str, k: int) -> int:
-        N, ans, start = len(S), 0, 0
-        
+        N, intervals, last, ans = len(S), [], -inf, 0
+
+        # to get all palindromes of size k
         for center in range(2 * N - 1):
-        # Odd: center is even → left == right
-        # Even: center is odd → right = left + 1
-            # centre of palindrome, eg (0,0), (0,1), (1,1), (1,2)...
-            left = center // 2 # center = even value eg 0, 2 then left == right 
-            right = left + center % 2 # center = 3, 5 then left = 1, 2 and right is always left + 1
-        
-            while left >= start and right < N and S[left] == S[right]:
-                if right + 1 - left >= k: # found a valid palindrome, dont expand if we get one
-                    ans += 1
-                    start = right + 1 # starts at or after start to prevent overlapping, next palindrome can start from right+1
-                    break # stop expanding — move to next center
+            left = center // 2
+            right = left + center % 2
+            while left >= 0 and right < N and S[left] == S[right]:
+                if right + 1 - left >= k: 
+                    intervals.append((left, right + 1)) # next palindrome should start from right + 1 for non overl
+                    break
                 left -= 1
                 right += 1
         
+        print(intervals)
+        
+        for x, y in intervals:
+            if x >= last: # if start of new palindrome >= end of last palindrome 
+                last = y # update where this palindrome ends
+                ans += 1
+            else:
+                if y < last: last = y # if overlap then take the smaller end value to make it non overlap, like done in intervals ques
         return ans
