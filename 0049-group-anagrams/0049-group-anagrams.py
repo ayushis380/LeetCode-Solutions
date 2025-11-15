@@ -3,10 +3,8 @@ class Solution:
         store = defaultdict(list)
 
         for s in strs:
-            count = [0] * 26
-            for ch in s:
-                count[ord(ch) - ord('a')] += 1
-            
-            store[(tuple(count))].append(s)
+            # key = sorted(s)
+            key = "".join(sorted(s))
+            store[key].append(s)
         
         return list(store.values())
