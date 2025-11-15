@@ -1,8 +1,8 @@
 class RandomizedSet:
 
     def __init__(self):
-        self.hmap = {}
         self.hlist = []
+        self.hmap = defaultdict(int)
 
     def insert(self, val: int) -> bool:
         if val not in self.hmap:
@@ -15,18 +15,16 @@ class RandomizedSet:
     def remove(self, val: int) -> bool:
         if val in self.hmap:
             ind = self.hmap[val]
-            lastel = self.hlist[-1]
-            lastInd = self.hmap[lastel]
-
-            self.hlist[ind] = lastel
-            self.hmap[lastel] = ind
+            last_val = self.hlist[-1]
+            self.hmap[last_val] = ind
+            self.hlist[ind] = last_val
 
             self.hlist.pop()
             del self.hmap[val]
 
             return True
-        
         return False
+        
 
     def getRandom(self) -> int:
         return random.choice(self.hlist)
