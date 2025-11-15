@@ -13,9 +13,10 @@ class Solution:
     def romanToInt(self, s: str) -> int:
         total = 0
         i = 0
+        n = len(s)
 
-        while i < len(s):
-            if i + 1 < len(s) and values[s[i]] < values[s[i+1]]:
+        while i < n:
+            if i + 1 < n and values[s[i]] < values[s[i+1]]:
                 total += values[s[i+1]] - values[s[i]]
                 i += 2
             else:
