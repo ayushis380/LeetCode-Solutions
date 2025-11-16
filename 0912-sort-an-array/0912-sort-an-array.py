@@ -1,13 +1,14 @@
 class Solution:
     def sortArray(self, nums: List[int]) -> List[int]:
-        count = Counter(nums)
         minv, maxv = min(nums), max(nums)
-        i = 0
+        count = Counter(nums)
+        result = []
 
         for val in range(minv, maxv + 1):
-            while count[val] > 0:
-                nums[i] = val
-                count[val] -= 1
-                i += 1
+            if val in count:
+                while count[val]:
+                    result.append(val)
+                    count[val] -= 1
         
-        return nums
+        return result
+
