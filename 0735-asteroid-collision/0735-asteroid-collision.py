@@ -9,10 +9,10 @@ class Solution:
                 if diff == 0:
                     stack.pop()
                     ast = 0
-                elif diff < 0: # add ast
-                    stack.pop()
+                elif diff > 0:
+                    ast = 0
                 else:
-                    ast = 0 # not add ast, as its -ve
+                    stack.pop()
             
             if ast != 0:
                 stack.append(ast)
