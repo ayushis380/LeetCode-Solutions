@@ -8,32 +8,21 @@ class Solution:
         if not lists:
             return None
         
-        iterator = 1
-        n = len(lists)
-        while iterator < n:
-            for i in range(0, n - iterator, iterator * 2):
-                lists[i] = self.merge(lists[i], lists[i + iterator])
-            iterator *= 2
-
-        return lists[0]
-
-    def merge(self, l1, l2):
-        dummy = ListNode(0)
+        heap = []
+        dummy = ListNode()
         cur = dummy
 
-        while l1 and l2:
-            if l1.val < l2.val:
-                cur.next = l1
-                l1 = l1.next
-            else:
-                cur.next = l2
-                l2 = l2.next
-            
-            cur = cur.next
+        for i, ls in enumerate(lists):
+            if ls:
+                heapq.heappush(heap, (ls.val, i, ls))
         
-        if l1:
-            cur.next = l1
-        if l2:
-            cur.next = l2
+        while heap:
+            val, ind, ls = heapq.heappop(heap)
+            node = ListNode(val)
+            cur.next = node
+            cur = node
+
+            if ls.next:
+                heapq.heappush(heap, (ls.next.val, ind, ls.next))
         
         return dummy.next
