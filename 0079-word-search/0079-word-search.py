@@ -12,13 +12,13 @@ class Solution:
             value = board[r][c]
             board[r][c] = "#"
 
-            result = False
             for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
                 nr, nc = r + dr, c + dc
-                result |= dfs(nr, nc, i+1)
+                if dfs(nr, nc, i+1):
+                    return True
 
             board[r][c] = value
-            return result
+            return False
         
         for r in range(rows):
             for c in range(cols):
