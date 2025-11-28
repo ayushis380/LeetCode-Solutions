@@ -1,6 +1,5 @@
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        intervals.sort()
         time = []
         rooms = 0
 
@@ -9,7 +8,6 @@ class Solution:
             time.append([e, -1])
         
         time.sort()
-
         count = 0
         for t, val in time:
             count += val
