@@ -1,3 +1,4 @@
+from collections import defaultdict
 class RandomizedSet:
 
     def __init__(self):
@@ -9,22 +10,21 @@ class RandomizedSet:
             self.hmap[val] = len(self.hlist)
             self.hlist.append(val)
             return True
+        
         return False
 
     def remove(self, val: int) -> bool:
         if val in self.hmap:
             ind = self.hmap[val]
-            lval = self.hlist[-1]
+            lastVal = self.hlist[-1]
 
-            self.hmap[lval] = ind
-            self.hlist[ind] = lval
-
-            del self.hmap[val]
+            self.hmap[lastVal] = ind
+            self.hlist[ind] = lastVal
             self.hlist.pop()
+            del self.hmap[val]
+            
             return True
-        
         return False
-        
 
     def getRandom(self) -> int:
         return random.choice(self.hlist)
