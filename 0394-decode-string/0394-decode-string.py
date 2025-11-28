@@ -1,19 +1,23 @@
 class Solution:
     def decodeString(self, s: str) -> str:
         stack = []
+        i = 0
 
         for ch in s:
-            if ch != "]":
-                stack.append(ch) 
+            if ch != ']':
+                stack.append(ch) # push all, to find nested strings
             else:
-                substr = ""
-                while stack[-1] != "[": # to get the characters inside []
-                    substr = stack.pop() + substr # see the order its popped, original order to be maintained
-                stack.pop() # pop "["
+                word = ""
+                while stack[-1] != '[':
+                    word = stack.pop() + word
+                stack.pop()
 
                 k = ""
-                while stack and stack[-1].isdigit(): # get the k value, a digit 
-                    k = stack.pop() + k # form the k value
-                stack.append(int(k) * substr) # append to stack k times the substr
-        
+                while stack and stack[-1].isdigit(): # k can be 23 - all in chars
+                    k = stack.pop() + k
+                
+                stack.append(int(k) * word)
+                
         return "".join(stack)
+
+        
