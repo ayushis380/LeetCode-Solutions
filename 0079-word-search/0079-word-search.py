@@ -9,16 +9,15 @@ class Solution:
             if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] != word[i]:
                 return False
             
-            visited = board[r][c]
+            value = board[r][c]
             board[r][c] = "#"
+
             result = False
-            
             for dr, dc in [[-1,0], [1,0], [0,1], [0,-1]]:
                 nr, nc = r + dr, c + dc
-                if dfs(nr, nc, i+1):
-                    result = True
-            
-            board[r][c] = visited
+                result |= dfs(nr, nc, i+1)
+
+            board[r][c] = value
             return result
         
         for r in range(rows):
