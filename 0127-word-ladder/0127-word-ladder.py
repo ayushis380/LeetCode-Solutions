@@ -3,30 +3,33 @@ class Solution:
         if endWord not in wordList:
             return 0
         
-        length = 1
         wordList.append(beginWord)
         queue = deque([beginWord])
+        visited = set([(beginWord)])
         adjlist = defaultdict(list)
-        visited = set([beginWord])
+        steps = 1
 
-        for wrd in wordList:
-            for j in range(len(wrd)):
-                pattern = wrd[:j] + "*" + wrd[j+1:]
-                adjlist[pattern].append(wrd)
+        for word in wordList:
+            for i in range(len(word)):
+                pattern = word[:i] + "*" + word[i+1:]
+                adjlist[pattern].append(word)
         
         while queue:
             curlen = len(queue)
-
             for _ in range(curlen):
                 word = queue.popleft()
                 if word == endWord:
-                    return length
-                visited.add(word)
-
-                for j in range(len(word)):
-                    pattern = word[:j] + "*" + word[j+1:]
+                    return steps
+                
+                for i in range(len(word)):
+                    pattern = word[:i] + "*" + word[i+1:]
                     for nei in adjlist[pattern]:
                         if nei not in visited:
                             queue.append(nei)
+                            visited.add(nei)
             
-            length += 1
+            steps += 1
+        
+        return 0
+
+        
