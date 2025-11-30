@@ -1,20 +1,20 @@
 class Solution:
     def myPow(self, x: float, n: int) -> float:
-        def calc(x, n):
-            if x == 0:
-                return 0
+        def power(x, n):
             if n == 0:
                 return 1
-            
-            half = calc(x, n//2)
-            result = half * half
-            
-            if n % 2:
-                result *= x
-            return result
+            if x == 0:
+                return 0
 
-        res = calc(x, abs(n))
-        if n >= 0:
+            half = power(x, n//2)
+            res = half * half
+
+            if n % 2:
+                res *= x
             return res
+        
+        value = power(x, abs(n))
+        if n >= 0:
+            return value
         else:
-            return 1/res
+            return 1/value
