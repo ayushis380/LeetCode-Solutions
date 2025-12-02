@@ -13,19 +13,16 @@ class Solution:
         if not root:
             return None
         
-        queue = deque([root])
+        cur, nxt = root, root.left if root else None
 
-        while queue:
-            size = len(queue)
-            for i in range(size):
-                node = queue.popleft()
-
-                if i < size - 1:
-                    node.next = queue[0]
-                
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+        while cur and nxt:
+            cur.left.next = cur.right
+            if cur.next:
+                cur.right.next = cur.next.left
+            
+            cur = cur.next
+            if not cur:
+                cur = nxt
+                nxt = cur.left
         
         return root
