@@ -11,22 +11,26 @@ class Node:
 class Solution:
     def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if not head: return head
-        
+
         dummy = Node(0)
-        cur = dummy 
-        stack = [head] # add node.next and then node.child so that child value is popped first 
+        cur = dummy
+        stack = [head]
 
         while stack:
-            tmp = stack.pop()
-            if tmp.next:
-                stack.append(tmp.next) # added before, we need to start back from here
-            if tmp.child:
-                stack.append(tmp.child) # need to be processed before
+            node = stack.pop()
+
+            if node.next:
+                stack.append(node.next)
+            if node.child:
+                stack.append(node.child)
             
-            cur.next = tmp
-            tmp.prev = cur
-            tmp.child = None # asked in ques to set
-            cur = tmp
+            cur.next = node
+            node.prev = cur
+            cur = cur.next
+            cur.child = None
+
+        dummy.next.prev = None
+        return dummy.next
+
+
         
-        dummy.next.prev = None # head.prev = None
-        return dummy.next # head
