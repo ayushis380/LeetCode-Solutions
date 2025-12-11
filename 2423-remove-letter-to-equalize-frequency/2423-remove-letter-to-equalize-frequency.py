@@ -1,24 +1,24 @@
 class Solution:
     def equalFrequency(self, word: str) -> bool:
-        freq = Counter(word)
-        bucket = Counter(list(freq.values()))
+        count = Counter(word)
+        bucket = Counter(count.values())
 
         if len(bucket) == 1:
-            count, howmany = bucket.popitem()
-            return count == 1 or howmany == 1 # aabbcc will give 2: 3, but when we remove anything it will disbalance
+            ct, frq = bucket.popitem()
+            return ct == 1 or frq == 1
         
+        # print(bucket)
         if len(bucket) == 2:
-            (c1, h1), (c2, h2) = bucket.items()
+            c1, f1 = bucket.popitem()
+            c2, f2 = bucket.popitem()
+
             if c1 > c2:
                 c1, c2 = c2, c1
-                h1, h2 = h2, h1
+                f1, f2 = f2, f1
             
-            if c1 == 1 and h1 == 1: # c1 is smaller and occurs once
+            if c1 == 1 and f1 == 1:
                 return True
-            
-            if c2 == c1 + 1 and h2 == 1: # c2 occurs just one more than c1
+            elif c2 == c1 + 1 and f2 == 1:
                 return True
         
         return False
-            
-            
