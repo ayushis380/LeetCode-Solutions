@@ -6,21 +6,28 @@
 #         self.right = right
 class Solution:
     def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
-        cols = defaultdict(list)
+        colMap = defaultdict(list)
         result = []
 
-        def preorder(node, r, c):
+        def traversal(node, r, c):
             if not node:
                 return 
             
-            cols[c].append((r, node.val)) # tuple row, value
-            preorder(node.left, r + 1, c - 1)
-            preorder(node.right, r + 1, c + 1)
+            colMap[c].append((r, node.val))
+            if node.left:
+                traversal(node.left, r + 1, c - 1)
+            if node.right:
+                traversal(node.right, r + 1, c + 1)
         
-        preorder(root, 0, 0)
-        
-        for i in sorted(cols.keys()):
-            level = sorted(cols[i], key = lambda x : (x[0], x[1]))
-            result.append([v for _, v in level])
+        traversal(root, 0, 0)
+        mincol = min([key for key in colMap.keys()])
+        maxcol = max([key for key in colMap.keys()])
+        print(mincol)
+        print(maxcol)
+
+        for col in range(mincol, maxcol + 1):
+            # temp = colMap[col]
+            # print(temp)
+            result.append([val for r, val in sorted(colMap[col])])
         
         return result
