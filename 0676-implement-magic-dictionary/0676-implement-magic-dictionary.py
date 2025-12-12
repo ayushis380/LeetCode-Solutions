@@ -18,23 +18,23 @@ class MagicDictionary:
             cur.endOfWord = True
 
     def search(self, searchWord: str) -> bool:
-
-        def dfs(node, i, changed):
+        def dfs(cur, i, changed):
             if i == len(searchWord):
-                return changed and node.endOfWord # lengths should match eg leetcode and leetcoded
+                return changed and cur.endOfWord
             
             ch = searchWord[i]
             
-            for child_char, child in node.children.items():
-                if child_char == ch:
-                    if dfs(child, i + 1, changed):
+            for key_ch, child in cur.children.items():
+                if key_ch == ch:
+                    if dfs(child, i+1, changed):
                         return True
-                else:
-                    if not changed:
+                else: # character doesnt match
+                    if not changed: # only one change is allowed
                         if dfs(child, i + 1, True):
                             return True
-            return False
 
+            return False
+        
         return dfs(self.root, 0, False)
 
 
