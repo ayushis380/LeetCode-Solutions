@@ -1,51 +1,56 @@
 class TrieNode:
     def __init__(self):
-        self.endOfWord = False
         self.children = {}
+        self.endOfWord = False
 
 class Solution:
-    def __init__(self):
-        self.root = TrieNode()
-
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        rows, cols = len(board), len(board[0])
-        result = []
-
-        # Build Trie
-        for w in words:
-            cur = self.root
-            for ch in w:
+        # add all words to trie
+        root = TrieNode()
+        for wrd in words:
+            cur = root
+            for ch in wrd:
                 if ch not in cur.children:
                     cur.children[ch] = TrieNode()
                 cur = cur.children[ch]
             cur.endOfWord = True
+        
+        rows, cols = len(board), len(board[0])
+        result = []
 
-        def dfs(r, c, cur, w):
-            if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] not in cur.children:
-                return
-
+        def dfs(r, c, cur, wrd):
+            if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] not in cur.children or board[r][c] == "#":
+                return 
+            
             ch = board[r][c]
-            w += ch
             next_node = cur.children[ch]
+            wrd += ch
             board[r][c] = "#"
 
             if next_node.endOfWord:
-                result.append(w)
-                next_node.endOfWord = False  # Avoid duplicates
+                result.append(wrd)
+                next_node.endOfWord = False # avoid duplicates
 
-            for dr, dc in [[-1, 0], [1, 0], [0, 1], [0, -1]]:
-                nr, nc = r + dr, c + dc
-                dfs(nr, nc, next_node, w)
+            dfs(r + 1, c, next_node, wrd)
+            dfs(r - 1, c, next_node, wrd)
+            dfs(r, c - 1, next_node, wrd)
+            dfs(r, c + 1, next_node, wrd)
 
             board[r][c] = ch
+            
+            if not next_node.children: # prune if next node doesn't have any children
+        # eg in oath, when at "h" - no children then t.children[h] is deleted as "h" is leaf node and wont be used again
+                del cur.children[ch] 
 
-            # PRUNING STEP: If no children left after DFS, remove this node
-            if not next_node.children:
-                del cur.children[ch]
-
-        # Start DFS from each cell
         for r in range(rows):
             for c in range(cols):
-                dfs(r, c, self.root, "")
-
+                dfs(r, c, root, "")
+        
+        # def print_trie(node, prefix=""):
+        #     if node.endOfWord:
+        #         print(f"'{prefix}' (end)")
+        #     for ch, child in node.children.items():
+        #         print_trie(child, prefix + ch)
+        
+        # print_trie(root)
         return result
