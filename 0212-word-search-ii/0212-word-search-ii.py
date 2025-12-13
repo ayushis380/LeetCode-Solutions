@@ -5,52 +5,42 @@ class TrieNode:
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        # add all words to trie
         root = TrieNode()
-        for wrd in words:
-            cur = root
-            for ch in wrd:
-                if ch not in cur.children:
-                    cur.children[ch] = TrieNode()
-                cur = cur.children[ch]
-            cur.endOfWord = True
-        
         rows, cols = len(board), len(board[0])
         result = []
 
-        def dfs(r, c, cur, wrd):
-            if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] not in cur.children or board[r][c] == "#":
-                return 
+        for word in words:
+            cur = root
+            for ch in word:
+                if ch not in cur.children:
+                    cur.children[ch] = TrieNode()
+                cur = cur.children[ch]
+            
+            cur.endOfWord = True
+        
+        def dfs(cur, r, c, word): # cur start from root
+            if r >= rows or r < 0 or c >= cols or c < 0 or board[r][c] not in cur.children:
+                return
             
             ch = board[r][c]
-            next_node = cur.children[ch]
-            wrd += ch
             board[r][c] = "#"
+            word += ch
+            cur = cur.children[ch]
+            
+            if cur.endOfWord:
+                result.append(word)
+                cur.endOfWord = False
 
-            if next_node.endOfWord:
-                result.append(wrd)
-                next_node.endOfWord = False # avoid duplicates
-
-            dfs(r + 1, c, next_node, wrd)
-            dfs(r - 1, c, next_node, wrd)
-            dfs(r, c - 1, next_node, wrd)
-            dfs(r, c + 1, next_node, wrd)
+            for dr, dc in [[-1,0], [1,0], [0,-1], [0,1]]:
+                nr, nc = r + dr, c + dc
+                dfs(cur, nr, nc, word)
 
             board[r][c] = ch
-            
-            if not next_node.children: # prune if next node doesn't have any children
-        # eg in oath, when at "h" - no children then t.children[h] is deleted as "h" is leaf node and wont be used again
-                del cur.children[ch] 
+        
+        # print(root.children.items())
 
         for r in range(rows):
             for c in range(cols):
-                dfs(r, c, root, "")
+                dfs(root, r, c, "")
         
-        # def print_trie(node, prefix=""):
-        #     if node.endOfWord:
-        #         print(f"'{prefix}' (end)")
-        #     for ch, child in node.children.items():
-        #         print_trie(child, prefix + ch)
-        
-        # print_trie(root)
         return result
