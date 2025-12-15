@@ -1,36 +1,36 @@
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-        adjlist = defaultdict(list)
-        result = []
+        # N (E + V), N is number of queries - brute force, bfs called fro every query
+        # SC = E + V = graph storage
 
-        for i, eqt in enumerate(equations):
-            start, end = eqt
-            adjlist[start].append([end, values[i]])
-            adjlist[end].append([start, 1/values[i]])
+        adj = defaultdict(list) # a -> [(b, a/b)], store all numerators pointing to denominators and their division value; and vice versa
 
-        # print(adjlist)
-        def dfs(node, end, visited):
-            if node == end:
-                return 1
-            
-            visited.add(node)
-            for nei, wt in adjlist[node]:
-                if nei not in visited:
-                    res = dfs(nei, end, visited)
-                    if res != -1:
-                        return wt * res
+        for i, v in enumerate(equations):
+            fv, sv = v[0], v[1] # numerator and denominator
 
-            return -1.0 # no path 
+            adj[fv].append((sv, values[i]))
+            adj[sv].append((fv, 1/ values[i])) # un directed but with different weights 
         
-        for start, end in queries:
-            if start not in adjlist or end not in adjlist:
-                result.append(-1.0)
-                continue
+        # finding a path from src to target and multiplying the weights to get the result 
+        # eg a/c can be found if we have a/b and b/c = just multiply them 
+        # adj will have all mappings for a and b - use that 
+        def bfs(src, target):
+            if src not in adj or target not in adj:
+                return -1 # variables not present
             
-            value = dfs(start, end, set())
-            result.append(value)
+            q, visited = deque([(src, 1)]), set()
+            visited.add(src)
+
+            while q:
+                node, wt = q.popleft()
+                if node == target:
+                    return wt
+                
+                for nei, weight in adj[node]:
+                    if nei not in visited:
+                        q.append((nei, wt * weight)) # all weights get multiplied starting from src where we start with wt = 1
+                        visited.add(nei)
+            
+            return -1
         
-        return result
-
-
-
+        return [bfs(q[0], q[1]) for q in queries]
